@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Optional;
 
 /**
- * <p>The class holding the genshinstrument_instrument_played trigger.</p>
+ * <p>The class holding the genshinstrument:instrument_played trigger.</p>
  *
  * <p>
  * It is triggered in {@link InstrumentPacket} such that every sound
