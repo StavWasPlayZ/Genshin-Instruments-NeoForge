@@ -5,13 +5,16 @@ import com.cstav.genshinstrument.client.gui.screen.instrument.drum.AratakisGreat
 import com.cstav.genshinstrument.client.gui.screen.instrument.floralzither.FloralZitherScreen;
 import com.cstav.genshinstrument.client.gui.screen.instrument.vintagelyre.VintageLyreScreen;
 import com.cstav.genshinstrument.client.gui.screen.instrument.windsonglyre.WindsongLyreScreen;
+import com.cstav.genshinstrument.client.gui.screen.options.instrument.GridInstrumentOptionsScreen;
 import com.cstav.genshinstrument.item.clientExtensions.ModItemPredicates;
 import com.cstav.genshinstrument.util.CommonUtil;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod.EventBusSubscriber;
 import net.neoforged.fml.common.Mod.EventBusSubscriber.Bus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.ConfigScreenHandler.ConfigScreenFactory;
 
 @EventBusSubscriber(value = Dist.CLIENT, bus = Bus.MOD, modid = GInstrumentMod.MODID)
 public class ClientInitiator {
@@ -27,6 +30,11 @@ public class ClientInitiator {
         ModItemPredicates.register();
 
         CommonUtil.loadClasses(LOAD_ME);
+
+        // Register grid options type as the main configs
+        ModLoadingContext.get().registerExtensionPoint(ConfigScreenFactory.class,
+            () -> new ConfigScreenFactory((minecraft, screen) -> new GridInstrumentOptionsScreen(screen))
+        );
     }
 
 }

@@ -43,12 +43,4 @@ public class GInstrumentMod
 
         modContainer.getEventBus().register(this);
     }
-
-    // Register this options type as the main configs
-    @SubscribeEvent
-    public void onClientSetup(final FMLClientSetupEvent event) {
-        ModLoadingContext.get().registerExtensionPoint(ConfigScreenFactory.class,
-            () -> new ConfigScreenFactory((minecraft, screen) -> new GridInstrumentOptionsScreen(screen))
-        );
-    }
 }
