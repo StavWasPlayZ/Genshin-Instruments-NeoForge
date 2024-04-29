@@ -1,0 +1,12 @@
+{
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/genshin-instruments",
+
+    "1.20.4": {
+        "3.4.1": "Changes:\n- Added Chinese support by charmaznable & SteveNotSet\n- Added GUI visibility toggle (MoonstruckLucii suggestion)\n\nAchievements\n- Master achievement now grants 5exp\n- Root achievement now takes in any instrument, not just Genshin ones\n- Specified Master achievement to be Genshin-specific\n\nMIDI:- New slider added: Sensitivity\nAllows the player to control how sensitive dynamic touch input should be\n\nFixed:\n- Do-ReMi and Don-Ka labeling\n- Volume slider saving a way too accurate representation of volume\n- Potential resource leaks while reading Instrument styler sheets\n- Instrument buttons sometimes appearing black (Forge-only)"
+    },
+
+    "promos": {
+        "1.20.4-latest": "3.4.1",
+        "1.20.4-recommended": "3.4.1"
+    }
+}
