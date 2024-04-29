@@ -1,6 +1,7 @@
 package com.cstav.genshinstrument;
 
 import com.cstav.genshinstrument.attachment.ModAttachments;
+import com.cstav.genshinstrument.criteria.ModCriteria;
 import com.cstav.genshinstrument.item.GIItems;
 import com.cstav.genshinstrument.networking.GIPacketHandler;
 import com.cstav.genshinstrument.sound.GISounds;
@@ -33,5 +34,6 @@ public class GInstrumentMod
 
         GISounds.register(bus);
         GICreativeModeTabs.regsiter(bus);
+        ModCriteria.register(bus);
     }
 }
