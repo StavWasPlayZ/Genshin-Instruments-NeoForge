@@ -17,7 +17,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import java.util.function.Consumer;
 
 /**
- * An item responsible for opening an {@link InstrumentScreen}.
+ * An instrument responsible for opening an {@link InstrumentScreen}.
  */
 public class InstrumentItem extends Item {
 
@@ -34,7 +34,7 @@ public class InstrumentItem extends Item {
      * @param onOpenRequest A server-side event fired when the player has requested to interact
      * with the instrument.
      * It should send a packet to the given player for opening this instrument's screen.
-     * @param properties The properties of this instrument item. {@link Properties#stacksTo stack size}
+     * @param properties The properties of this instrument instrument. {@link Properties#stacksTo stack size}
      * will always be set to 1.
      */
     public InstrumentItem(final OpenInstrumentPacketSender onOpenRequest, final Properties properties) {

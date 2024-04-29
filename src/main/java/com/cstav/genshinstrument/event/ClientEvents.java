@@ -1,8 +1,8 @@
 package com.cstav.genshinstrument.event;
 
 import com.cstav.genshinstrument.GInstrumentMod;
-import com.cstav.genshinstrument.block.partial.AbstractInstrumentBlock;
 import com.cstav.genshinstrument.attachment.instrumentOpen.InstrumentOpenProvider;
+import com.cstav.genshinstrument.block.partial.AbstractInstrumentBlock;
 import com.cstav.genshinstrument.client.config.ModClientConfigs;
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.InstrumentScreen;
 import com.cstav.genshinstrument.client.midi.MidiController;
@@ -16,21 +16,21 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
-import net.neoforged.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber.Bus;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 import net.neoforged.neoforge.event.GameShuttingDownEvent;
-import net.neoforged.neoforge.event.TickEvent.ClientTickEvent;
 
 @OnlyIn(Dist.CLIENT)
-@EventBusSubscriber(bus = Bus.FORGE, modid = GInstrumentMod.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(bus = Bus.GAME, modid = GInstrumentMod.MODID, value = Dist.CLIENT)
 public class ClientEvents {
 
     private static final Minecraft MINECRAFT = Minecraft.getInstance();
 
 
     @SubscribeEvent
-    public static void onClientTick(final ClientTickEvent event) {
+    public static void postClientTickEvent(final ClientTickEvent.Post event) {
         InstrumentScreen.getCurrentScreen(MINECRAFT).ifPresent(InstrumentScreen::handleAbruptClosing);
     }
 

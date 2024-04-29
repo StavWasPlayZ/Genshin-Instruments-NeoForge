@@ -2,6 +2,7 @@ package com.cstav.genshinstrument.attachment.instrumentOpen;
 
 import com.cstav.genshinstrument.attachment.ModAttachments;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -37,14 +38,14 @@ public class InstrumentOpen implements INBTSerializable<CompoundTag> {
 
     /**
      * The position of the instrument block.
-     * Present only for when {@link InstrumentOpen#isItem() not an item}.
+     * Present only for when {@link InstrumentOpen#isItem() not an instrument}.
      */
     public BlockPos getBlockPos() {
         return blockPos;
     }
     /**
      * The hand holding the instrument.
-     * Present only for when {@link InstrumentOpen#isItem() is an item}.
+     * Present only for when {@link InstrumentOpen#isItem() is an instrument}.
      */
     public InteractionHand getHand() {
         return hand;
@@ -71,7 +72,7 @@ public class InstrumentOpen implements INBTSerializable<CompoundTag> {
     }
 
     @Override
-    public @UnknownNullability CompoundTag serializeNBT() {
+    public @UnknownNullability CompoundTag serializeNBT(Provider provider) {
         final CompoundTag nbt = new CompoundTag();
 
         nbt.putBoolean(OPEN_TAG, isOpen);
@@ -85,12 +86,12 @@ public class InstrumentOpen implements INBTSerializable<CompoundTag> {
         return nbt;
     }
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(Provider provider, CompoundTag nbt) {
         isOpen = nbt.getBoolean(OPEN_TAG);
         isItem = nbt.getBoolean(IS_ITEM_TAG);
 
-        if (nbt.contains(BLOCK_POS_TAG, Tag.TAG_COMPOUND))
-            blockPos = NbtUtils.readBlockPos(nbt.getCompound(BLOCK_POS_TAG));
+        NbtUtils.readBlockPos(nbt, BLOCK_POS_TAG).ifPresent(this::setBlockPos);
+
         if (nbt.contains(HAND_TAG, Tag.TAG_BYTE))
             hand = nbt.getBoolean(HAND_TAG) ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
     }

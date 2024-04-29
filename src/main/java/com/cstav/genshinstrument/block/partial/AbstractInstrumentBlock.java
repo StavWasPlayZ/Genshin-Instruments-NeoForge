@@ -1,7 +1,7 @@
 package com.cstav.genshinstrument.block.partial;
 
-import com.cstav.genshinstrument.block.partial.client.IClientArmPoseProvider;
 import com.cstav.genshinstrument.attachment.instrumentOpen.InstrumentOpenProvider;
+import com.cstav.genshinstrument.block.partial.client.IClientArmPoseProvider;
 import com.cstav.genshinstrument.client.ModArmPose;
 import com.cstav.genshinstrument.networking.GIPacketHandler;
 import com.cstav.genshinstrument.networking.packet.instrument.NotifyInstrumentOpenPacket;
@@ -9,7 +9,6 @@ import com.cstav.genshinstrument.util.ServerUtil;
 import net.minecraft.client.model.HumanoidModel.ArmPose;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -57,12 +56,10 @@ public abstract class AbstractInstrumentBlock extends BaseEntityBlock {
         return (ArmPose)clientBlockArmPose;
     }
 
-
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-            BlockHitResult pHit) {        
+    protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pResult) {
         if (pLevel.isClientSide)
-                return InteractionResult.CONSUME;
+            return InteractionResult.CONSUME;
 
 
         final BlockEntity be = pLevel.getBlockEntity(pPos);
@@ -76,7 +73,6 @@ public abstract class AbstractInstrumentBlock extends BaseEntityBlock {
 
         return InteractionResult.FAIL;
     }
-    
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {

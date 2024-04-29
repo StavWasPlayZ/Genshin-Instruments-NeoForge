@@ -3,7 +3,7 @@
 
     "display": {
         "icon": {
-            "item": "genshinstrument:windsong_lyre"
+            "id": "genshinstrument:windsong_lyre"
         },
 
         "title": {
@@ -20,7 +20,7 @@
 
             "conditions": {
                 "instrument": {
-                    "items": ["genshinstrument:windsong_lyre"]
+                    "items": "genshinstrument:windsong_lyre"
                 }
             }
         }

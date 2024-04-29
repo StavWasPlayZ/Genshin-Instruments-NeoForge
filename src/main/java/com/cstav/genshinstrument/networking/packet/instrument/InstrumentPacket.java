@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.Optional;
 
@@ -56,7 +56,7 @@ public class InstrumentPacket implements INoteIdentifierSender {
     }
 
     public InstrumentPacket(FriendlyByteBuf buf) {
-        pos = buf.readOptional(FriendlyByteBuf::readBlockPos);
+        pos = buf.readOptional((fbb) -> fbb.readBlockPos());
         sound = NoteSound.readFromNetwork(buf);
 
         pitch = buf.readInt();
@@ -68,7 +68,7 @@ public class InstrumentPacket implements INoteIdentifierSender {
 
     @Override
     public void write(final FriendlyByteBuf buf) {
-        buf.writeOptional(pos, FriendlyByteBuf::writeBlockPos);
+        buf.writeOptional(pos, (fbb, pos) -> buf.writeBlockPos(pos));
         sound.writeToNetwork(buf);
 
         buf.writeInt(pitch);
@@ -81,8 +81,8 @@ public class InstrumentPacket implements INoteIdentifierSender {
 
 
     @Override
-    public void handle(final PlayPayloadContext context) {
-        final ServerPlayer player = (ServerPlayer) context.player().get();
+    public void handle(final IPayloadContext context) {
+        final ServerPlayer player = (ServerPlayer) context.player();
         if (!InstrumentOpen.isOpen(player))
             return;
 

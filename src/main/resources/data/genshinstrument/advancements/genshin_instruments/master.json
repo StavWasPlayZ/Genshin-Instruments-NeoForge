@@ -3,7 +3,7 @@
 
     "display": {
         "icon": {
-            "item": "minecraft:ender_eye"
+            "id": "minecraft:ender_eye"
         },
 
         "title": {
@@ -22,10 +22,10 @@
 
             "conditions": {
                 "items": [
-                    {"items": ["genshinstrument:windsong_lyre"]},
-                    {"items": ["genshinstrument:vintage_lyre"]},
-                    {"items": ["genshinstrument:floral_zither"]},
-                    {"items": ["genshinstrument:glorious_drum"]}
+                    {"items": "genshinstrument:windsong_lyre"},
+                    {"items": "genshinstrument:vintage_lyre"},
+                    {"items": "genshinstrument:floral_zither"},
+                    {"items": "genshinstrument:glorious_drum"}
                 ]
             }
         }

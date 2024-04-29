@@ -9,7 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -55,7 +55,7 @@ public class NotifyInstrumentOpenPacket implements IModPacket {
     public NotifyInstrumentOpenPacket(final FriendlyByteBuf buf) {
         playerUUID = buf.readUUID();
         isOpen = buf.readBoolean();
-        pos = buf.readOptional(FriendlyByteBuf::readBlockPos);
+        pos = buf.readOptional((fbb) -> fbb.readBlockPos());
         hand = buf.readOptional((fbb) -> fbb.readEnum(InteractionHand.class));
     }
     
@@ -63,14 +63,14 @@ public class NotifyInstrumentOpenPacket implements IModPacket {
     public void write(FriendlyByteBuf buf) {
         buf.writeUUID(playerUUID);
         buf.writeBoolean(isOpen);
-        buf.writeOptional(pos, FriendlyByteBuf::writeBlockPos);
+        buf.writeOptional(pos, (fbb, pos) -> buf.writeBlockPos(pos));
         buf.writeOptional(hand, FriendlyByteBuf::writeEnum);
     }
 
 
     @SuppressWarnings("resource")
     @Override
-    public void handle(final PlayPayloadContext context) {
+    public void handle(final IPayloadContext context) {
         final Player player = Minecraft.getInstance().level.getPlayerByUUID(playerUUID);
 
         if (isOpen) {

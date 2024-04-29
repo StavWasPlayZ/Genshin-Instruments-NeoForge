@@ -8,7 +8,7 @@ import com.cstav.genshinstrument.networking.api.NetworkDirection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class CloseInstrumentPacket implements IModPacket {
     public static final NetworkDirection NETWORK_DIRECTION = NetworkDirection.PLAY_TO_SERVER;
@@ -24,8 +24,8 @@ public class CloseInstrumentPacket implements IModPacket {
 
 
     @Override
-    public void handle(final PlayPayloadContext context) {
-        final Player player = context.player().get();
+    public void handle(final IPayloadContext context) {
+        final Player player = context.player();
         InstrumentOpenProvider.setClosed(player);
 
         for (final Player oPlayer : player.level().players())

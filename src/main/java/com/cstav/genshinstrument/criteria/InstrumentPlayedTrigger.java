@@ -8,7 +8,6 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
@@ -19,7 +18,7 @@ import java.util.Optional;
  * <p>
  * It is triggered in {@link InstrumentPacket} such that every sound
  * produced by an instrument will trigger this criteria.
- * It will pass the played instrument from within the {@code instrument} JSON item object.
+ * It will pass the played instrument from within the {@code instrument} JSON instrument object.
  * </p>
  *
  * Internally, used for triggering advancements for the player.
@@ -38,18 +37,18 @@ public class InstrumentPlayedTrigger extends SimpleCriterionTrigger<InstrumentPl
     }
 
 
-    public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<ItemPredicate> item) implements SimpleCriterionTrigger.SimpleInstance {
+    public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<ItemPredicate> instrument) implements SimpleCriterionTrigger.SimpleInstance {
         public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create((triggerInstance) ->
             triggerInstance.group(
-                ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player")
+                EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player")
                     .forGetter(TriggerInstance::player),
-                ExtraCodecs.strictOptionalField(ItemPredicate.CODEC, "instrument")
-                    .forGetter(TriggerInstance::item)
+                ItemPredicate.CODEC.optionalFieldOf("instrument")
+                    .forGetter(TriggerInstance::instrument)
             ).apply(triggerInstance, TriggerInstance::new)
         );
 
         public boolean matches(final ItemStack instrument) {
-            return item.isEmpty() || item.get().matches(instrument);
+            return instrument().isEmpty() || instrument().get().test(instrument);
         }
     }
 

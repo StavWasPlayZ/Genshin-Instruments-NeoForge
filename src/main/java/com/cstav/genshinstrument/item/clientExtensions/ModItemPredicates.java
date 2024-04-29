@@ -22,7 +22,7 @@ public class ModItemPredicates {
     }
 
     /**
-     * Derives {@link InstrumentOpen} capability as item model predicate
+     * Derives {@link InstrumentOpen} capability as instrument model predicate
      */
     public static float instrumentOpenPredicate(ItemStack pStack, ClientLevel pLevel, LivingEntity pEntity, int pSeed) {
         if (!(pEntity instanceof Player player))

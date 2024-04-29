@@ -14,14 +14,14 @@ import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
-import net.neoforged.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber.Bus;
 
 /**
  * An options screen that implements a button to cycle through the instrument's sounds.
  */
 @OnlyIn(Dist.CLIENT)
-@EventBusSubscriber(bus = Bus.FORGE, modid = GInstrumentMod.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(bus = Bus.GAME, modid = GInstrumentMod.MODID, value = Dist.CLIENT)
 public abstract class SoundTypeOptionsScreen<T extends SoundType> extends SingleButtonOptionsScreen {
 
     public SoundTypeOptionsScreen(final GridInstrumentScreen screen) {

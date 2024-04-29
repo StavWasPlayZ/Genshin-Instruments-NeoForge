@@ -8,7 +8,7 @@ import com.cstav.genshinstrument.sound.NoteSound;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -47,12 +47,12 @@ public class PlayNotePacket implements INoteIdentifierSender {
         pitch = buf.readInt();
         volume = buf.readInt();
 
-        position = buf.readOptional(FriendlyByteBuf::readBlockPos);
+        position = buf.readOptional((fbb) -> fbb.readBlockPos());
         sound = NoteSound.readFromNetwork(buf);
         instrumentId = buf.readResourceLocation();
         noteIdentifier = buf.readOptional(this::readNoteIdentifierFromNetwork);
 
-        playerUUID = buf.readOptional(FriendlyByteBuf::readUUID);
+        playerUUID = buf.readOptional((fbb) -> fbb.readUUID());
     }
 
     @Override
@@ -60,17 +60,17 @@ public class PlayNotePacket implements INoteIdentifierSender {
         buf.writeInt(pitch);
         buf.writeInt(volume);
 
-        buf.writeOptional(position, FriendlyByteBuf::writeBlockPos);
+        buf.writeOptional(position, (fbb, pos) -> buf.writeBlockPos(pos));
         sound.writeToNetwork(buf);
         buf.writeResourceLocation(instrumentId);
         buf.writeOptional(noteIdentifier, (fbb, identifier) -> identifier.writeToNetwork(fbb));
 
-        buf.writeOptional(playerUUID, FriendlyByteBuf::writeUUID);
+        buf.writeOptional(playerUUID, (fbb, uuid) -> buf.writeUUID(uuid));
     }
 
 
     @Override
-    public void handle(final PlayPayloadContext context) {
+    public void handle(final IPayloadContext context) {
         sound.play(
             pitch, volume, playerUUID,
             instrumentId, noteIdentifier, position

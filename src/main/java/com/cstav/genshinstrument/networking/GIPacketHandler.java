@@ -8,8 +8,6 @@ import com.cstav.genshinstrument.networking.buttonidentifier.NoteButtonIdentifie
 import com.cstav.genshinstrument.networking.buttonidentifier.NoteGridButtonIdentifier;
 import com.cstav.genshinstrument.networking.packet.instrument.*;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
-import net.neoforged.fml.common.Mod.EventBusSubscriber.Bus;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
@@ -35,9 +33,9 @@ public class GIPacketHandler {
 
 
     public static void sendToServer(final IModPacket packet) {
-        PacketDistributor.SERVER.noArg().send(packet);
+        PacketDistributor.sendToServer(packet);
     }
     public static void sendToClient(final IModPacket packet, final ServerPlayer player) {
-        PacketDistributor.PLAYER.with(player).send(packet);
+        PacketDistributor.sendToPlayer(player, packet);
     }
 }

@@ -3,13 +3,15 @@ package com.cstav.genshinstrument.networking.api;
 import com.cstav.genshinstrument.GInstrumentMod;
 import com.mojang.logging.LogUtils;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.FriendlyByteBuf.Reader;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
-import net.neoforged.fml.common.Mod.EventBusSubscriber.Bus;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber.Bus;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Constructor;
@@ -28,35 +30,27 @@ public class OOPPacketRegistrar {
     }
 
     @SubscribeEvent
-    public static void registerPackets(final RegisterPayloadHandlerEvent event) {
+    public static void registerPackets(final RegisterPayloadHandlersEvent event) {
         for (final var entry : MOD_PACKETS_MAP.entrySet()) {
             final String modid = entry.getKey();
-            final IPayloadRegistrar registrar = event.registrar(modid);
+            final PayloadRegistrar registrar = event.registrar(modid);
 
             final ModPacketsContainer packetsContainer = entry.getValue();
             registrar.versioned(packetsContainer.protocolVersion());
 
             for (final Class<IModPacket> packetType : entry.getValue().packetTypes()) {
                 try {
-                    registrar.play(IModPacket.getPacketId(modid, packetType), getPacketInstantiation(packetType), (handler) -> {
-                        try {
-                            if (getDirection(packetType) == NetworkDirection.PLAY_TO_CLIENT) {
-                                handler.client(OOPPacketRegistrar::handlePacket);
-                            } else {
-                                handler.server(OOPPacketRegistrar::handlePacket);
-                            }
-                        } catch (Exception e) {
-                            LOGGER.error(
-                                "Error registering packet of type "+packetType.getName()
-                                    +". Make sure to have static field of NetworkDirection NETWORK_DIRCTION",
-                                e
-                            );
-                        }
-                    });
+                    final CustomPacketPayload.Type<IModPacket> type = IModPacket.getPacketType(modid, packetType);
+                    
+                    if (getDirection(packetType) == NetworkDirection.PLAY_TO_CLIENT) {
+                        registrar.playToClient(type, getPacketInstantiation(packetType), OOPPacketRegistrar::handlePacket);
+                    } else {
+                        registrar.playToServer(type, getPacketInstantiation(packetType), OOPPacketRegistrar::handlePacket);
+                    }
                 } catch (Exception e) {
                     LOGGER.error(
                         "Error registering packet of type "+packetType.getName()
-                            +". Make sure to have a constructor taking FriendlyByteBuf.",
+                            +". Make sure to have a constructor taking FriendlyByteBuf & static field of NetworkDirection NETWORK_DIRCTION.",
                         e
                     );
                 }
@@ -64,8 +58,8 @@ public class OOPPacketRegistrar {
         }
     }
 
-    private static void handlePacket(IModPacket packet, PlayPayloadContext context) {
-        context.workHandler().submitAsync(() -> packet.handle(context));
+    private static void handlePacket(IModPacket packet, IPayloadContext context) {
+        context.enqueueWork(() -> packet.handle(context));
     }
 
     @SuppressWarnings("unchecked")
@@ -79,15 +73,23 @@ public class OOPPacketRegistrar {
         return getStaticField(packetType, "NETWORK_DIRECTION");
     }
 
-    private static Reader<IModPacket> getPacketInstantiation(Class<IModPacket> packetType)
+    private static StreamCodec<? super RegistryFriendlyByteBuf, IModPacket>getPacketInstantiation(Class<IModPacket> packetType)
             throws NoSuchMethodException {
         final Constructor<IModPacket> packetConstructor = packetType.getDeclaredConstructor(FriendlyByteBuf.class);
 
-        return (buf) -> {
-            try {
-                return packetConstructor.newInstance(buf);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+        return new StreamCodec<>() {
+            @Override
+            public IModPacket decode(RegistryFriendlyByteBuf buf) {
+                try {
+                    return packetConstructor.newInstance(buf);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public void encode(RegistryFriendlyByteBuf buf, IModPacket packet) {
+                packet.write(buf);
             }
         };
     }

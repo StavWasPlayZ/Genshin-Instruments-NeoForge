@@ -1,7 +1,7 @@
 package com.cstav.genshinstrument.event;
 
-import com.cstav.genshinstrument.block.partial.InstrumentBlockEntity;
 import com.cstav.genshinstrument.attachment.instrumentOpen.InstrumentOpenProvider;
+import com.cstav.genshinstrument.block.partial.InstrumentBlockEntity;
 import com.cstav.genshinstrument.networking.buttonidentifier.NoteButtonIdentifier;
 import com.cstav.genshinstrument.sound.NoteSound;
 import net.minecraft.core.BlockPos;
@@ -56,13 +56,13 @@ public class InstrumentPlayedEvent extends Event implements ICancellableEvent {
     public static class ByPlayer extends InstrumentPlayedEvent implements ICancellableEvent {
         public final Player player;
 
-        // The value below will only be supplied if initiated from an item
+        // The value below will only be supplied if initiated from an instrument
         /** The hand holding the instrument played by this player */
         public final Optional<InteractionHand> hand;
 
 
         /**
-         * <p>Returns whether this event was fired by an item instrument.</p>
+         * <p>Returns whether this event was fired by an instrument instrument.</p>
          * A {@code false} result does NOT indicate a block instrument.
          * @see ByPlayer#isBlockInstrument
          */
@@ -71,7 +71,7 @@ public class InstrumentPlayedEvent extends Event implements ICancellableEvent {
         }
         /**
          * <p>Returns whether this event was fired by a block instrument.</p>
-         * A {@code false} result does NOT indicate an instrument item.
+         * A {@code false} result does NOT indicate an instrument instrument.
          * @see ByPlayer#isItemInstrument()
          */
         public boolean isBlockInstrument() {

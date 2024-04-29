@@ -11,10 +11,10 @@ import com.cstav.genshinstrument.util.CommonUtil;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
-import net.neoforged.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber.Bus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.ConfigScreenHandler.ConfigScreenFactory;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 @EventBusSubscriber(value = Dist.CLIENT, bus = Bus.MOD, modid = GInstrumentMod.MODID)
 public class ClientInitiator {
@@ -32,8 +32,8 @@ public class ClientInitiator {
         CommonUtil.loadClasses(LOAD_ME);
 
         // Register grid options type as the main configs
-        ModLoadingContext.get().registerExtensionPoint(ConfigScreenFactory.class,
-            () -> new ConfigScreenFactory((minecraft, screen) -> new GridInstrumentOptionsScreen(screen))
+        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () ->
+            (minecraft, screen) ->  new GridInstrumentOptionsScreen(screen)
         );
     }
 

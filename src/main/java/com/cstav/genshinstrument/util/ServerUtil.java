@@ -203,7 +203,7 @@ public class ServerUtil {
 
     // Item/block stuff
     /**
-     * Sends an instrument open packet as an item
+     * Sends an instrument open packet as an instrument
      */
     public static boolean sendOpenPacket(ServerPlayer player, InteractionHand usedHand, OpenInstrumentPacketSender onOpenRequest) {
         return sendOpenPacket(player, usedHand, onOpenRequest, null);

@@ -11,9 +11,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.FriendlyByteBuf;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.DistExecutor;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -52,7 +51,7 @@ public class OpenInstrumentPacket implements IModPacket {
 
 
     @Override
-    public void handle(final PlayPayloadContext context) {
+    public void handle(final IPayloadContext context) {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             ((Supplier<Runnable>)(() -> () ->
 
