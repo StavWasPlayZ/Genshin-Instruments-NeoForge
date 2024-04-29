@@ -12,7 +12,7 @@ For full Mod and "in-game" API documentations, visit [the Forge version's reposi
 ## Other Ports
 - [Forge port](https://github.com/StavWasPlayZ/Genshin-Instruments/)
 - [Fabric port](https://github.com/StavWasPlayZ/Genshin-Instruments-Fabric/)
-- 
+
 > WhY NoT JuSt uSe mUlTiLoAdEr
 
 I didn't know about it and I regret my life for it its too late to turn back send help
