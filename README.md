@@ -1,28 +1,38 @@
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D1LE3HC)
 
-Installation information
-=======
+<img align="right" src="https://github.com/StavWasPlayZ/Genshin-Instruments/blob/master/src/main/resources/icon.png?raw=true" width="100">
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions at [github](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+# Genshin Instruments
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+Genshin Instruments is a Forge, NeoForge and Fabric mod that brings in Genshin Impact's set of instruments into your Minecraft worlds!
 
-> **Note**: For Eclipse, use tasks in `Launch Group` instead of ones founds in `Java Application`. A preparation task must run before launching the game. NeoGradle uses launch groups to do these subsequently.
+For documentation of gameplay, visit [the mod's CurseForge page](https://www.curseforge.com/minecraft/mc-mods/genshin-instruments).  
+For full Mod and "in-game" API documentations, visit [the Forge version's repository wiki](https://github.com/StavWasPlayZ/Genshin-Instruments/wiki).
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+> WhY NoT JuSt uSe mUlTiLoAdEr
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license, if you do not agree with it you can change your mapping names to other crowdsourced names in your 
-build.gradle. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+I didn't know about it and I regret my life for it its too late to turn back send help
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+## Other Ports
+- [Forge port](https://github.com/StavWasPlayZ/Genshin-Instruments/)
+- [Fabric port](https://github.com/StavWasPlayZ/Genshin-Instruments-Fabric/)
+
+# Contributing
+
+Unless directly related to the Fabric port, do refer to the [Forge port](https://github.com/StavWasPlayZ/Genshin-Instruments/).
+Those get synced here eventually.
+
+## Reporting Bugs
+It's very common I do an oopsie while I code.  
+For most developers too.  
+If you observe a wrong behavior and believe I am at fault, feel free to compose a bug report!
+
+I would appreciate reports that state more than _"My game crashed!"_, but rather, what you *did* to achieve such a state.
+
+**MAKE SURE TO ATTACH YOUR FULL `debug.log`/`latest.log`, REGARDLESS OF THE BUG TYPE!**  
+Online tutorials for how to retrieve one are present online.
+
+## Why won't he respond to my query??
+GitHub has 1 dire issue: that I for some reason, sometimes, don't get notified one new
+issues/PRs being made.  
+If you notice a lack of response, please DM me in CurseForge and I'll be sure to be present!
