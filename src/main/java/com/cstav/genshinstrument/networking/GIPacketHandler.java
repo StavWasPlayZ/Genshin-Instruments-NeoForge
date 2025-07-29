@@ -1,43 +1,60 @@
 package com.cstav.genshinstrument.networking;
 
 import com.cstav.genshinstrument.GInstrumentMod;
-import com.cstav.genshinstrument.networking.api.IModPacket;
-import com.cstav.genshinstrument.networking.api.OOPPacketRegistrar;
-import com.cstav.genshinstrument.networking.buttonidentifier.DrumNoteIdentifier;
-import com.cstav.genshinstrument.networking.buttonidentifier.NoteButtonIdentifier;
-import com.cstav.genshinstrument.networking.buttonidentifier.NoteGridButtonIdentifier;
-import com.cstav.genshinstrument.networking.packet.instrument.*;
+import com.cstav.genshinstrument.networking.packet.instrument.c2s.C2SHeldNoteSoundPacket;
+import com.cstav.genshinstrument.networking.packet.instrument.c2s.C2SNoteSoundPacket;
+import com.cstav.genshinstrument.networking.packet.instrument.c2s.CloseInstrumentPacket;
+import com.cstav.genshinstrument.networking.packet.instrument.c2s.ReqInstrumentOpenStatePacket;
+import com.cstav.genshinstrument.networking.packet.instrument.s2c.NotifyInstrumentOpenPacket;
+import com.cstav.genshinstrument.networking.packet.instrument.s2c.OpenInstrumentPacket;
+import com.cstav.genshinstrument.networking.packet.instrument.s2c.S2CHeldNoteSoundPacket;
+import com.cstav.genshinstrument.networking.packet.instrument.s2c.S2CNoteSoundPacket;
+import com.cstav.genshinstrument.util.ServerUtil;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
-import net.neoforged.fml.common.Mod.EventBusSubscriber.Bus;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.network.Channel.VersionTest;
+import net.minecraftforge.network.ChannelBuilder;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.SimpleChannel;
 
 import java.util.List;
 
+@EventBusSubscriber(modid = GInstrumentMod.MODID, bus = Bus.MOD)
 public class GIPacketHandler {
     @SuppressWarnings("unchecked")
     public static final List<Class<IModPacket>> ACCEPTABLE_PACKETS = List.of(new Class[] {
-        InstrumentPacket.class, PlayNotePacket.class, OpenInstrumentPacket.class, CloseInstrumentPacket.class,
-        NotifyInstrumentOpenPacket.class
+        NotifyInstrumentOpenPacket.class,
+        C2SNoteSoundPacket.class, S2CNoteSoundPacket.class,
+        OpenInstrumentPacket.class, CloseInstrumentPacket.class,
+        C2SHeldNoteSoundPacket.class, S2CHeldNoteSoundPacket.class,
+        ReqInstrumentOpenStatePacket.class
     });
 
-    @SuppressWarnings("unchecked")
-    public static final List<Class<? extends NoteButtonIdentifier>> ACCEPTABLE_IDENTIFIERS = List.of(new Class[] {
-        NoteButtonIdentifier.class, NoteGridButtonIdentifier.class, DrumNoteIdentifier.class
-    });
-
-
-    private static final String PROTOCOL_VERSION = "5.0";
-
+    private static int id = 0;
     public static void registerPackets() {
-        OOPPacketRegistrar.registerModPackets(GInstrumentMod.MODID, ACCEPTABLE_PACKETS, PROTOCOL_VERSION);
+        ServerUtil.registerModPackets(INSTANCE, ACCEPTABLE_PACKETS, () -> id++);
     }
 
 
-    public static void sendToServer(final IModPacket packet) {
-        PacketDistributor.SERVER.noArg().send(packet);
+    private static final String PROTOCOL_VERSION = "5.1";
+
+    private static int protocolVersion() {
+        return Integer.parseInt(PROTOCOL_VERSION.replace(".", ""));
     }
-    public static void sendToClient(final IModPacket packet, final ServerPlayer player) {
-        PacketDistributor.PLAYER.with(player).send(packet);
+    
+
+    private static final SimpleChannel INSTANCE = ChannelBuilder
+        .named(GInstrumentMod.loc("main"))
+        .networkProtocolVersion(protocolVersion())
+        .acceptedVersions(VersionTest.exact(protocolVersion()))
+    .simpleChannel();
+
+
+    public static <T> void sendToServer(final T packet) {
+        INSTANCE.send(packet, PacketDistributor.SERVER.noArg());
+    }
+    public static <T> void sendToClient(final T packet, final ServerPlayer player) {
+        INSTANCE.send(packet, PacketDistributor.PLAYER.with(player));
     }
 }

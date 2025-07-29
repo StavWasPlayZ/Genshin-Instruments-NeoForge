@@ -1,6 +1,6 @@
 package com.cstav.genshinstrument.client.gui.screen.options.instrument.partial;
 
-import com.cstav.genshinstrument.client.gui.screen.instrument.partial.notegrid.GridInstrumentScreen;
+import com.cstav.genshinstrument.client.gui.screen.instrument.partial.grid.GridInstrumentScreen;
 import com.cstav.genshinstrument.client.gui.screen.options.instrument.GridInstrumentOptionsScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
@@ -8,8 +8,8 @@ import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.SpacerElement;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.awt.*;
 
@@ -48,9 +48,9 @@ public abstract class SingleButtonOptionsScreen extends GridInstrumentOptionsScr
         super.render(gui, pMouseX, pMouseY, pPartialTick);
 
         gui.drawCenteredString(font,
-            Component.translatable(optionsLabelKey()),
-            width/2, heightBefore + SPACE_BEFORE
-            , Color.WHITE.getRGB()
+                Component.translatable(optionsLabelKey()),
+                width/2, heightBefore + SPACE_BEFORE
+                , Color.WHITE.getRGB()
         );
     }
 

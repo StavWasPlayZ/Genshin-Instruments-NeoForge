@@ -1,11 +1,13 @@
 package com.cstav.genshinstrument.block;
 
 import com.cstav.genshinstrument.GInstrumentMod;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModBlocks {
-    private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(GInstrumentMod.MODID);
+    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, GInstrumentMod.MODID);
 
     public static void register(final IEventBus bus) {
         BLOCKS.register(bus);

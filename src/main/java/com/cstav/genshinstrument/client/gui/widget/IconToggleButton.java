@@ -14,7 +14,7 @@ public class IconToggleButton extends Button {
     public IconToggleButton(int x, int y, int size,
                             ResourceLocation iconEnabled, ResourceLocation iconDisabled,
                             OnPress onPress) {
-        super(new Button.Builder(CommonComponents.EMPTY, onPress)
+        super(new Builder(CommonComponents.EMPTY, onPress)
             .pos(x, y)
         );
         width = height = size;
@@ -31,6 +31,16 @@ public class IconToggleButton extends Button {
 
     public boolean enabled() {
         return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+    /**
+     * Toggles the value of {@link IconToggleButton#enabled}
+     */
+    public void toggle() {
+        setEnabled(!enabled);
     }
 
     @Override
@@ -50,7 +60,7 @@ public class IconToggleButton extends Button {
 
     @Override
     public void onPress() {
-        enabled = !enabled;
+        toggle();
         super.onPress();
     }
 }

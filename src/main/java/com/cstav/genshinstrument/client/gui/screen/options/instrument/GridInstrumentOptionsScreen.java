@@ -2,9 +2,9 @@ package com.cstav.genshinstrument.client.gui.screen.options.instrument;
 
 import com.cstav.genshinstrument.GInstrumentMod;
 import com.cstav.genshinstrument.client.config.ModClientConfigs;
-import com.cstav.genshinstrument.client.config.enumType.label.NoteGridLabel;
+import com.cstav.genshinstrument.client.config.enumType.NoteGridLabel;
+import com.cstav.genshinstrument.client.gui.screen.instrument.partial.grid.GridInstrumentScreen;
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.note.label.INoteLabel;
-import com.cstav.genshinstrument.client.gui.screen.instrument.partial.notegrid.GridInstrumentScreen;
 import com.cstav.genshinstrument.client.gui.screen.options.instrument.partial.InstrumentOptionsScreen;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.layouts.GridLayout;
@@ -12,16 +12,15 @@ import net.minecraft.client.gui.layouts.GridLayout.RowHelper;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
-import net.neoforged.fml.common.Mod.EventBusSubscriber.Bus;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.ConfigScreenHandler.ConfigScreenFactory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-@OnlyIn(Dist.CLIENT)
+@EventBusSubscriber(bus = Bus.MOD, modid = GInstrumentMod.MODID, value = Dist.CLIENT)
 public class GridInstrumentOptionsScreen extends InstrumentOptionsScreen {
 
     public GridInstrumentOptionsScreen(final GridInstrumentScreen screen) {
@@ -50,8 +49,10 @@ public class GridInstrumentOptionsScreen extends InstrumentOptionsScreen {
 
     @Override
     public boolean isPitchSliderEnabled() {
-        return (instrumentScreen == null) ||
-            !((GridInstrumentScreen)instrumentScreen).isSSTI();
+        return !instrumentScreen
+            .map((screen) -> (GridInstrumentScreen) screen)
+            .map(GridInstrumentScreen::isSSTI)
+            .orElse(false);
     }
 
 
@@ -70,6 +71,15 @@ public class GridInstrumentOptionsScreen extends InstrumentOptionsScreen {
 
     protected void onRenderBackgroundChanged(final CycleButton<Boolean> button, final boolean value) {
         ModClientConfigs.RENDER_BACKGROUND.set(value);
+    }
+
+
+    // Register this options type as the main configs
+    @SubscribeEvent
+    public static void onClientSetup(final FMLClientSetupEvent event) {
+        ModLoadingContext.get().registerExtensionPoint(ConfigScreenFactory.class,
+            () -> new ConfigScreenFactory((minecraft, screen) -> new GridInstrumentOptionsScreen(screen))
+        );
     }
     
 }

@@ -5,12 +5,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
-import net.neoforged.fml.common.Mod.EventBusSubscriber.Bus;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
+@EventBusSubscriber(modid = GInstrumentMod.MODID, bus = Bus.MOD)
 public class GICreativeModeTabs {
 
     private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, GInstrumentMod.MODID);
@@ -19,7 +20,7 @@ public class GICreativeModeTabs {
         TABS.register(bus);
     }
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab>
+    public static final RegistryObject<CreativeModeTab>
         INSTRUMENTS_TAB = TABS.register("instruments_tab",
             () -> CreativeModeTab.builder()
 

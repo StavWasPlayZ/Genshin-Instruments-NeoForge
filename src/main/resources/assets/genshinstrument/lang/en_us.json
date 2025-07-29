@@ -9,7 +9,10 @@
     "item.genshinstrument.windsong_lyre": "Windsong Lyre",
     "item.genshinstrument.floral_zither": "Floral Zither",
     "item.genshinstrument.vintage_lyre": "Vintage Lyre",
-    "item.genshinstrument.glorious_drum": "Arataki's Great And Glorious Drum",
+    "item.genshinstrument.glorious_drum": "Arataki's Great and Glorious Drum",
+    "item.genshinstrument.nightwind_horn": "Nightwind Horn",
+    "item.genshinstrument.ukulele": "Ukulele",
+    "item.genshinstrument.djem_djem_drum": "Djem Djem Drum",
 
 
     "soundCategory.record": "Instruments",
@@ -19,6 +22,7 @@
     "label.genshinstrument.midiOptions": "MIDI Options",
     "label.genshinstrument.zither_options": "Zither Options",
     "label.genshinstrument.vintage_lyre_options": "Vintage Lyre Options",
+    "label.genshinstrument.ukulele_options": "Ukulele Options",
 
     "genshinstrument.genshin_disclaimer.title": "Disclaimer!",
     "genshinstrument.genshin_disclaimer.content": "Genshin Instruments is an %s and %s Minecraft mod that is in no way affiliated with neither Genshin Impact nor HoYoverse.\n\nThus, all Genshin-related assets used in-game, such as sounds, images, instruments etc. are of complete ownership to HoYoverse.\n\nAs the user, you have the full responsibility over your actions within the game, including (but not limited to!) playing and sharing/publishing any songs that may be protected under copyright laws.",
@@ -70,6 +74,12 @@
     "button.genshinstrument.normalize_vintage_lyre": "Normalize Vintage Lyre",
     "button.genshinstrument.normalize_vintage_lyre.tooltip": "Normalizes all flattened notes in the Vintage Lyre. Does not apply to the max pitch.",
 
+    "button.genshinstrument.ukulele_3rd_octave" : "Ukulele's 3rd Octave",
+
+    "button.genshinstrument.ukulele_3rd_octave.chords" : "Chords",
+    "button.genshinstrument.ukulele_3rd_octave.treble" : "Treble",
+    "button.genshinstrument.ukulele_3rd_octave.treble.tooltip": "Because of Minecraft limitations, the more you pitch up the instrument, the more notes will be heard as B2.",
+
 
     "button.none": "None",
 
@@ -84,7 +94,8 @@
     "button.genshinstrument.zither.soundType.new": "New",
 
 
-    "button.genshinstrument.label.do_re_mi": "Do Re Mi",
+    "button.genshinstrument.label.do_re_mi": "do re mi",
+    "button.genshinstrument.label.do_re_mi.description": "Labels will be of the musical notation \"do re mi.\"",
 
     "genshinstrument.label.do": "do",
     "genshinstrument.label.re": "re",
@@ -99,12 +110,29 @@
 
 
     "button.genshinstrument.label.keyboard_layout": "Keyboard",
+    "button.genshinstrument.label.keyboard_layout.description": "Labels will be of your local keyboard layout",
     "button.genshinstrument.label.qwerty": "Keyboard (QWERTY)",
-    "button.genshinstrument.label.note_name": "Note Name",
-    "button.genshinstrument.label.abc": "ABC",
+    "button.genshinstrument.label.qwerty.description": "Labels will be of the QWERTY keyboard layout",
+    "button.genshinstrument.label.note_name": "ABC",
+    "button.genshinstrument.label.note_name.description": "Labels will be of the musical notation \"ABC\"",
+
+    "button.genshinstrument.label.fixed_abc": "Fixed ABC",
+    "button.genshinstrument.label.fixed_abc.description": "ABC labels that are not affected by custom transpositions (pitch)",
+    "button.genshinstrument.label.fixed_do_re_mi": "Fixed do re mi",
+    "button.genshinstrument.label.fixed_do_re_mi.description": "do re mi labels that are not affected by custom transpositions (pitch)",
+
     "button.genshinstrument.label.none": "No Label",
+    "button.genshinstrument.label.none.description": "",
 
     "button.genshinstrument.label.don_ka": "Don-Ka",
+
+    "button.genshinstrument.label.genshin_notation": "Genshin Notation",
+    "button.genshinstrument.label.genshin_notation.description": "The note labeling, as appears in Genshin Impact.",
+
+    "genshinstrument.label.genshin_notation.djem_djem_drum.b": "B",
+    "genshinstrument.label.genshin_notation.djem_djem_drum.t": "T",
+    "genshinstrument.label.genshin_notation.djem_djem_drum.s": "S",
+    "genshinstrument.label.genshin_notation.djem_djem_drum.r": "R",
 
 
 
@@ -121,9 +149,18 @@
     "genshinstrument.advancements.main.vintage_lyre.description": "Play the Vintage Lyre",
 
     "genshinstrument.advancements.main.glorious_drum.title": "Totally Not a Scam",
-    "genshinstrument.advancements.main.glorious_drum.description": "Play Arataki's Glorious Drum",
+    "genshinstrument.advancements.main.glorious_drum.description": "Play Arataki's Great and Glorious Drum",
 
     "genshinstrument.advancements.main.floral_zither.title": "Incognito Player",
-    "genshinstrument.advancements.main.floral_zither.description": "Play the Floral Zither"
+    "genshinstrument.advancements.main.floral_zither.description": "Play the Floral Zither",
+
+    "genshinstrument.advancements.main.nightwind_horn.title": "The Final Symphony",
+    "genshinstrument.advancements.main.nightwind_horn.description": "Play the Nightwind Horn",
+
+    "genshinstrument.advancements.main.people_of_the_springs.title": "Chasing Waves",
+    "genshinstrument.advancements.main.people_of_the_springs.description": "Play any of the People of the Springs' instruments",
+
+    "genshinstrument.advancements.main.master_of_the_springs.title": "Master of the Springs",
+    "genshinstrument.advancements.main.master_of_the_springs.description": "Play all of the People of the Springs' instruments"
 
 }

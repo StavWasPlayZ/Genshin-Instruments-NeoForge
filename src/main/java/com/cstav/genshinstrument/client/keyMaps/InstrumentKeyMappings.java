@@ -2,24 +2,19 @@ package com.cstav.genshinstrument.client.keyMaps;
 
 import com.cstav.genshinstrument.GInstrumentMod;
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.InstrumentScreen;
-import com.cstav.genshinstrument.client.gui.screen.instrument.partial.notegrid.GridInstrumentScreen;
-import com.mojang.blaze3d.platform.InputConstants;
+import com.cstav.genshinstrument.client.gui.screen.instrument.partial.grid.GridInstrumentScreen;
 import com.mojang.blaze3d.platform.InputConstants.Key;
 import com.mojang.blaze3d.platform.InputConstants.Type;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
-import net.neoforged.fml.common.Mod.EventBusSubscriber.Bus;
-import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import net.neoforged.neoforge.client.settings.IKeyConflictContext;
-import net.neoforged.neoforge.common.util.Lazy;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.settings.IKeyConflictContext;
+import net.minecraftforge.common.util.Lazy;
 import org.lwjgl.glfw.GLFW;
 
 @OnlyIn(Dist.CLIENT)
-@EventBusSubscriber(bus = Bus.MOD, modid = GInstrumentMod.MODID, value = Dist.CLIENT)
 public class InstrumentKeyMappings {
     public static final String CATEGORY = GInstrumentMod.MODID+".keymaps";
 
@@ -42,20 +37,19 @@ public class InstrumentKeyMappings {
     public static final Lazy<KeyMapping> TRANSPOSE_UP_MODIFIER = Lazy.of(
         () -> new KeyMapping(CATEGORY+".transpose_up_modifier",
             INSTRUMENT_KEY_CONFLICT_CONTEXT,
-            InputConstants.Type.KEYSYM,
+            Type.KEYSYM,
             GLFW.GLFW_KEY_LEFT_SHIFT
         , CATEGORY)
     );
     public static final Lazy<KeyMapping> TRANSPOSE_DOWN_MODIFIER = Lazy.of(
         () -> new KeyMapping(CATEGORY+".transpose_down_modifier",
             INSTRUMENT_KEY_CONFLICT_CONTEXT,
-            InputConstants.Type.KEYSYM,
+            Type.KEYSYM,
             GLFW.GLFW_KEY_LEFT_ALT
         , CATEGORY)
     );
 
 
-    @SubscribeEvent
     public static void registerKeybinds(final RegisterKeyMappingsEvent event) {
         event.register(TRANSPOSE_UP_MODIFIER.get());
         event.register(TRANSPOSE_DOWN_MODIFIER.get());
@@ -70,17 +64,18 @@ public class InstrumentKeyMappings {
         {90, 88, 67, 86, 66, 78, 77, 44}
     });
 
+
     // Glorious drum
-    public static final DrumKeys
-        DON = new DrumKeys(83, 75),
-        KA = new DrumKeys(65, 76)
+    public static final GloriousDrumKeys
+        DON = new GloriousDrumKeys(83, 75),
+        KA = new GloriousDrumKeys(65, 76)
     ;
 
     @OnlyIn(Dist.CLIENT)
-    public static final class DrumKeys {
+    public static final class GloriousDrumKeys {
         public final Key left, right;
 
-        private DrumKeys(final int left, final int right) {
+        private GloriousDrumKeys(final int left, final int right) {
             this.left = create(left);
             this.right = create(right);
         }

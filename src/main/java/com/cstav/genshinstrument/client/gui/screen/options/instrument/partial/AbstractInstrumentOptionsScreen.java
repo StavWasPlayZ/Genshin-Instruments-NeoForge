@@ -7,35 +7,48 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.slf4j.Logger;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.HashMap;
+import java.util.Optional;
 
+/**
+ * The base class for all instrument options screens.
+ */
 @OnlyIn(Dist.CLIENT)
 public abstract class AbstractInstrumentOptionsScreen extends Screen {
 
-    public final @Nullable InstrumentScreen instrumentScreen;
+    public final Optional<InstrumentScreen> instrumentScreen;
     public final Screen lastScreen;
 
+    /**
+     * True if this menu is an overlay of an {@link InstrumentScreen};
+     * and one does exist
+     */
     public final boolean isOverlay;
-
-
+    
+    
     public AbstractInstrumentOptionsScreen(Component pTitle, InstrumentScreen instrumentScreen, Screen lastScreen) {
         super(pTitle);
-        this.instrumentScreen = instrumentScreen;
+        this.instrumentScreen = Optional.ofNullable(instrumentScreen);
         this.lastScreen = lastScreen;
 
         this.isOverlay = instrumentScreen != null;
     }
+    public AbstractInstrumentOptionsScreen(Component pTitle, Optional<InstrumentScreen> instrumentScreen, Screen lastScreen) {
+        this(pTitle, instrumentScreen.orElse(null), lastScreen);
+    }
     public AbstractInstrumentOptionsScreen(Component pTitle, InstrumentScreen instrumentScreen) {
         this(pTitle, instrumentScreen, null);
     }
+    public AbstractInstrumentOptionsScreen(Component pTitle, Optional<InstrumentScreen> instrumentScreen) {
+        this(pTitle, instrumentScreen, null);
+    }
     public AbstractInstrumentOptionsScreen(Component pTitle, Screen prevScreen) {
-        this(pTitle, null, prevScreen);
+        this(pTitle, Optional.empty(), prevScreen);
     }
 
 
@@ -52,24 +65,27 @@ public abstract class AbstractInstrumentOptionsScreen extends Screen {
 
     @Override
     public void render(GuiGraphics gui, int pMouseX, int pMouseY, float pPartialTick) {
-        gui.drawCenteredString(font, title, width/2, 15, Color.WHITE.getRGB());
-
         super.render(gui, pMouseX, pMouseY, pPartialTick);
+        gui.drawCenteredString(font, title, width/2, 15, Color.WHITE.getRGB());
     }
 
 
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
         // Pass keys to the instrument screen if they are consumed
-        if (isOverlay && instrumentScreen.isKeyConsumed(pKeyCode, pScanCode))
-            instrumentScreen.keyPressed(pKeyCode, pScanCode, pModifiers);
+        instrumentScreen.ifPresent((screen) -> {
+           if (screen.isKeyConsumed(pKeyCode, pScanCode))
+               screen.keyPressed(pKeyCode, pScanCode, pModifiers);
+        });
 
         return super.keyPressed(pKeyCode, pScanCode, pModifiers);
     }
     @Override
     public boolean keyReleased(int pKeyCode, int pScanCode, int pModifiers) {
-        if (isOverlay && instrumentScreen.isKeyConsumed(pKeyCode, pScanCode))
-            instrumentScreen.keyReleased(pKeyCode, pScanCode, pModifiers);
+        instrumentScreen.ifPresent((screen) -> {
+           if (screen.isKeyConsumed(pKeyCode, pScanCode))
+               screen.keyReleased(pKeyCode, pScanCode, pModifiers);
+        });
 
         return super.keyReleased(pKeyCode, pScanCode, pModifiers);
     }
@@ -77,7 +93,7 @@ public abstract class AbstractInstrumentOptionsScreen extends Screen {
 
     @Override
     public boolean isPauseScreen() {
-        return instrumentScreen == null;
+        return !isOverlay;
     }
 
     @Override
@@ -125,7 +141,7 @@ public abstract class AbstractInstrumentOptionsScreen extends Screen {
 
         appliedOptions.values().forEach(Runnable::run);
         ModClientConfigs.CONFIGS.save();
-
+        
         LOGGER.info("Successfully saved "+appliedOptions.size()+" option(s) for "+title.getString());
     }
 
@@ -135,7 +151,7 @@ public abstract class AbstractInstrumentOptionsScreen extends Screen {
      * @apiNote Should be overwritten in the case of not being used by an instrument
      */
     public String modId() {
-        return isOverlay ? instrumentScreen.getModId() : null;
+        return instrumentScreen.map(InstrumentScreen::getModId).orElse(null);
     }
-
+    
 }

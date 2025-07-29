@@ -3,8 +3,8 @@ package com.cstav.genshinstrument.client.gui.screen.instrument.partial.note.labe
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.note.NoteButton;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * A functional interface for supplying a label for a note button

@@ -6,6 +6,8 @@ import com.mojang.blaze3d.platform.InputConstants.Key;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
+import java.util.Locale;
+
 /**
  * An interface holding {@link NoteLabelSupplier}s for note buttons to cycle thorugh.
  */
@@ -58,6 +60,6 @@ public interface INoteLabel {
      * @return The translation key of this label
      */
     public default String getKey() {
-        return BUTTON_TRANS_PATH + toString().toLowerCase();
+        return BUTTON_TRANS_PATH + toString().toLowerCase(Locale.ENGLISH);
     }
 }

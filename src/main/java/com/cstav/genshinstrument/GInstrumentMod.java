@@ -1,18 +1,22 @@
 package com.cstav.genshinstrument;
 
-import com.cstav.genshinstrument.attachment.ModAttachments;
 import com.cstav.genshinstrument.criteria.ModCriteria;
 import com.cstav.genshinstrument.item.GIItems;
 import com.cstav.genshinstrument.networking.GIPacketHandler;
+import com.cstav.genshinstrument.networking.buttonidentifier.DjemDjemDrumNoteIdentifier;
+import com.cstav.genshinstrument.networking.buttonidentifier.GloriousDrumNoteIdentifier;
+import com.cstav.genshinstrument.networking.buttonidentifier.NoteButtonIdentifiers;
+import com.cstav.genshinstrument.networking.buttonidentifier.NoteGridButtonIdentifier;
 import com.cstav.genshinstrument.sound.GISounds;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The main class for the Genshin Instruments mod
+ * The main class of the Genshin Instruments mod
  * 
  * @author StavWasPlayZ
  */
@@ -22,18 +26,29 @@ public class GInstrumentMod
     public static final String MODID = "genshinstrument";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
+    public static ResourceLocation loc(final String name) {
+        return ResourceLocation.fromNamespaceAndPath(MODID, name);
+    }
 
-    public GInstrumentMod(IEventBus bus, ModContainer modContainer)
+
+    public GInstrumentMod()
     {
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
         GIPacketHandler.registerPackets();
+        NoteButtonIdentifiers.register(
+            NoteGridButtonIdentifier.class,
+            GloriousDrumNoteIdentifier.class,
+            DjemDjemDrumNoteIdentifier.class
+        );
+
+        ModCriteria.register(bus);
 
         GIItems.register(bus);
-        ModAttachments.register(bus);
         // ModBlocks.register(bus);
         // ModBlockEntities.register(bus);
 
         GISounds.register(bus);
         GICreativeModeTabs.regsiter(bus);
-        ModCriteria.register(bus);
     }
 }

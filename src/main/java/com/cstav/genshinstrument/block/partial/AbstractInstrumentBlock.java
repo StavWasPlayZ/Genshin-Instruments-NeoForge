@@ -1,15 +1,14 @@
 package com.cstav.genshinstrument.block.partial;
 
 import com.cstav.genshinstrument.block.partial.client.IClientArmPoseProvider;
-import com.cstav.genshinstrument.attachment.instrumentOpen.InstrumentOpenProvider;
+import com.cstav.genshinstrument.capability.instrumentOpen.InstrumentOpenProvider;
 import com.cstav.genshinstrument.client.ModArmPose;
 import com.cstav.genshinstrument.networking.GIPacketHandler;
-import com.cstav.genshinstrument.networking.packet.instrument.NotifyInstrumentOpenPacket;
-import com.cstav.genshinstrument.util.ServerUtil;
+import com.cstav.genshinstrument.networking.packet.instrument.s2c.NotifyInstrumentOpenPacket;
+import com.cstav.genshinstrument.networking.packet.instrument.util.InstrumentPacketUtil;
 import net.minecraft.client.model.HumanoidModel.ArmPose;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -17,9 +16,10 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.fml.loading.FMLEnvironment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -57,32 +57,32 @@ public abstract class AbstractInstrumentBlock extends BaseEntityBlock {
         return (ArmPose)clientBlockArmPose;
     }
 
-
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-            BlockHitResult pHit) {        
+    protected @NotNull InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer,
+                                                        BlockHitResult pHitResult) {
         if (pLevel.isClientSide)
-                return InteractionResult.CONSUME;
+            return InteractionResult.CONSUME;
 
 
         final BlockEntity be = pLevel.getBlockEntity(pPos);
         if (!(be instanceof InstrumentBlockEntity))
             return InteractionResult.FAIL;
 
-        if (ServerUtil.sendOpenPacket((ServerPlayer)pPlayer, this::onInstrumentOpen, pPos)) {
+        if (InstrumentPacketUtil.sendOpenPacket((ServerPlayer)pPlayer, this::onInstrumentOpen, pPos)) {
             ((InstrumentBlockEntity)be).users.add(pPlayer.getUUID());
             return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.FAIL;
     }
-    
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
         final BlockEntity be = pLevel.getBlockEntity(pPos);
-        if (!(be instanceof InstrumentBlockEntity))
+        if (!(be instanceof InstrumentBlockEntity)) {
+            super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
             return;
+        }
 
 
         final InstrumentBlockEntity ibe = (InstrumentBlockEntity)be;
@@ -93,6 +93,8 @@ public abstract class AbstractInstrumentBlock extends BaseEntityBlock {
                 GIPacketHandler.sendToClient(new NotifyInstrumentOpenPacket(user), (ServerPlayer)player);
             });
         }
+
+        super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
     }
 
 }

@@ -5,8 +5,8 @@ import com.cstav.genshinstrument.client.gui.screen.instrument.partial.Instrument
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.note.animation.RingAnimationController;
 import com.cstav.genshinstrument.client.util.ClientUtil;
 import net.minecraft.client.gui.GuiGraphics;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.awt.*;
 
@@ -16,15 +16,17 @@ public class NoteRing {
 
     protected final RingAnimationController ringAnimation;
 
-    public final NoteButton note;
+    public final NoteButton noteButton;
     public int size;
     public float alpha;
+    protected boolean isForeign;
 
-    public NoteRing(final NoteButton note, final boolean isForeign) {
-        this.note = note;
-        ringAnimation = new RingAnimationController(.3f, 40, this);
-
-        // Immediately play
+    public NoteRing(final NoteButton noteButton, final boolean isForeign) {
+        this.noteButton = noteButton;
+        this.isForeign = isForeign;
+        ringAnimation = new RingAnimationController(.3, 40, this);
+    }
+    public void playAnim() {
         if (isForeign)
             ringAnimation.play(-.4f);
         else
@@ -38,10 +40,15 @@ public class NoteRing {
 
         ringAnimation.update();
 
-        final Point ringCenter = ClientUtil.getInitCenter(note.getInitX(), note.getInitY(), note.instrumentScreen.getNoteSize(), size);
+        final Point ringCenter = ClientUtil.getInitCenter(
+            noteButton.getInitX(),
+            noteButton.getInitY(),
+            noteButton.instrumentScreen.getNoteSize(),
+            size
+        );
 
 
-        ClientUtil.setShaderColor(themeLoader.noteRing(), alpha);
+        ClientUtil.setShaderColor(themeLoader.noteRing(noteButton), alpha);
 
         gui.blit(InstrumentScreen.getInternalResourceFromGlob(RING_GLOB_FILENAME),
             ringCenter.x, ringCenter.y,

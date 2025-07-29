@@ -1,14 +1,14 @@
 package com.cstav.genshinstrument.block;
 
 import com.cstav.genshinstrument.GInstrumentMod;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public abstract class ModBlockEntities {
     
-    public static final DeferredRegister<BlockEntityType<?>> BETS = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, GInstrumentMod.MODID);
+    public static final DeferredRegister<BlockEntityType<?>> BETS = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, GInstrumentMod.MODID);
     public static void register(final IEventBus bus) {
         BETS.register(bus);
     }
