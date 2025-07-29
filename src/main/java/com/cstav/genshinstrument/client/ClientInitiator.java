@@ -13,21 +13,20 @@ import com.cstav.genshinstrument.client.gui.screen.instrument.vintagelyre.Vintag
 import com.cstav.genshinstrument.client.gui.screen.instrument.windsonglyre.WindsongLyreScreen;
 import com.cstav.genshinstrument.item.clientExtensions.ModItemPredicates;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.model.SeparateTransformsModel;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.config.ModConfig.Type;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.config.ModConfig.Type;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.model.SeparateTransformsModel;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
-@EventBusSubscriber(value = Dist.CLIENT, bus = Bus.MOD, modid = GInstrumentMod.MODID)
+@EventBusSubscriber(value = Dist.CLIENT, modid = GInstrumentMod.MODID)
 public class ClientInitiator {
 
     private static final Map<ResourceLocation, Supplier<? extends InstrumentScreen>> INSTRUMENTS = Map.of(
@@ -56,7 +55,7 @@ public class ClientInitiator {
 
     @SubscribeEvent
     public static void modelLoadEvent(final ModelEvent.RegisterGeometryLoaders event) {
-        event.register("separate_transforms", SeparateTransformsModel.Loader.INSTANCE);
+        event.register( GInstrumentMod.loc("separate_transforms"), SeparateTransformsModel.Loader.INSTANCE);
     }
 
 }

@@ -4,26 +4,24 @@ import com.cstav.genshinstrument.GInstrumentMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import static com.cstav.genshinstrument.networking.packet.instrument.util.InstrumentPacketUtil.sendOpenPacket;
 
-@EventBusSubscriber(modid = GInstrumentMod.MODID, bus = Bus.MOD)
+@EventBusSubscriber(modid = GInstrumentMod.MODID)
 public class GIItems {
     
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, GInstrumentMod.MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.createItems(GInstrumentMod.MODID);
     public static void register(final IEventBus bus) {
         ITEMS.register(bus);
     }
 
-    public static final RegistryObject<Item>
+    public static final DeferredHolder<Item, Item>
         WINDSONG_LYRE = ITEMS.register("windsong_lyre", () ->
             new InstrumentItem(
                 (player) -> sendOpenPacket(player, loc("windsong_lyre"))
@@ -76,7 +74,7 @@ public class GIItems {
         if (!event.getTabKey().equals(CreativeModeTabs.TOOLS_AND_UTILITIES))
             return;
 
-        for (final RegistryObject<Item> itemObj : ITEMS.getEntries())
+        for (final DeferredHolder<Item, ? extends Item> itemObj : ITEMS.getEntries())
             event.accept(itemObj.get());
     }
 

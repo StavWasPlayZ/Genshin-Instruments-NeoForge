@@ -8,22 +8,19 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.TickEvent.LevelTickEvent;
-import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
-@EventBusSubscriber(bus = Bus.FORGE, modid = GInstrumentMod.MODID)
+@EventBusSubscriber(modid = GInstrumentMod.MODID)
 public abstract class ServerEvents {
     private static final int MAX_BLOCK_INSTRUMENT_DIST = 6;
     
     @SubscribeEvent
-    public static void onServerTick(final LevelTickEvent event) {
-        if ((event.phase != Phase.END) && (event.side == LogicalSide.SERVER)) {
-            event.level.players().forEach((player) -> {
+    public static void onServerTick(final LevelTickEvent.Pre event) {
+        if (!event.getLevel().isClientSide) {
+            event.getLevel().players().forEach((player) -> {
                 if (shouldAbruptlyClose(player))
                     InstrumentPacketUtil.setInstrumentClosed((ServerPlayer) player);
             });

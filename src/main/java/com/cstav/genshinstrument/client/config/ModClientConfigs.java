@@ -10,16 +10,19 @@ import com.cstav.genshinstrument.client.gui.screen.instrument.ukelele.Ukulele3rd
 import com.cstav.genshinstrument.client.gui.screen.options.instrument.MidiOptionsScreen;
 import com.cstav.genshinstrument.client.util.ClientUtil;
 import com.cstav.genshinstrument.sound.NoteSound;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.*;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
+import net.neoforged.neoforge.common.ModConfigSpec.DoubleValue;
+import net.neoforged.neoforge.common.ModConfigSpec.EnumValue;
+import net.neoforged.neoforge.common.ModConfigSpec.IntValue;
 
 @OnlyIn(Dist.CLIENT)
 public class ModClientConfigs {
     //TODO: Prefix common configs the same
 
-    public static final ForgeConfigSpec CONFIGS;
+    public static final ModConfigSpec CONFIGS;
 
     public static final IntValue PITCH, MIDI_DEVICE_INDEX, OCTAVE_SHIFT, MIDI_CHANNEL;
     public static final DoubleValue VOLUME, MIDI_IN_SENSITIVITY;
@@ -42,7 +45,7 @@ public class ModClientConfigs {
 
 
     static {
-        final ForgeConfigSpec.Builder configBuilder = new Builder();
+        final ModConfigSpec.Builder configBuilder = new ModConfigSpec.Builder();
     
 
         PITCH = configBuilder.defineInRange("instrument_pitch",

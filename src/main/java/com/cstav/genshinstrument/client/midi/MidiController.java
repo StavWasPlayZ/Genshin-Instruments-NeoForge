@@ -3,11 +3,11 @@ package com.cstav.genshinstrument.client.midi;
 import com.cstav.genshinstrument.client.config.ModClientConfigs;
 import com.cstav.genshinstrument.event.MidiEvent;
 import com.mojang.logging.LogUtils;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.LogicalSidedProvider;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.util.LogicalSidedProvider;
 import org.slf4j.Logger;
 
 import javax.sound.midi.*;
@@ -137,7 +137,7 @@ public abstract class MidiController {
                     // We only want this to run on the render thread, not the MIDI one
                     LogicalSidedProvider.WORKQUEUE.get(LogicalSide.CLIENT).executeBlocking(() -> {
                         try {
-                            MinecraftForge.EVENT_BUS.post(new MidiEvent(message, timeStamp));
+                            NeoForge.EVENT_BUS.post(new MidiEvent(message, timeStamp));
                         } catch (Exception ignored) {}
                     });
                 }

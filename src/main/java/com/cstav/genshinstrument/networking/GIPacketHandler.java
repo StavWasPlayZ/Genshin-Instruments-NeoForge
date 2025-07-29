@@ -11,16 +11,11 @@ import com.cstav.genshinstrument.networking.packet.instrument.s2c.S2CHeldNoteSou
 import com.cstav.genshinstrument.networking.packet.instrument.s2c.S2CNoteSoundPacket;
 import com.cstav.genshinstrument.util.ServerUtil;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.network.Channel.VersionTest;
-import net.minecraftforge.network.ChannelBuilder;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.SimpleChannel;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.List;
 
-@EventBusSubscriber(modid = GInstrumentMod.MODID, bus = Bus.MOD)
+@EventBusSubscriber(modid = GInstrumentMod.MODID)
 public class GIPacketHandler {
     @SuppressWarnings("unchecked")
     public static final List<Class<IModPacket>> ACCEPTABLE_PACKETS = List.of(new Class[] {

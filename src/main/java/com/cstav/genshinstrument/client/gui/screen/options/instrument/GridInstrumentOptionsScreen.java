@@ -12,15 +12,10 @@ import net.minecraft.client.gui.layouts.GridLayout.RowHelper;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@EventBusSubscriber(bus = Bus.MOD, modid = GInstrumentMod.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = GInstrumentMod.MODID, value = Dist.CLIENT)
 public class GridInstrumentOptionsScreen extends InstrumentOptionsScreen {
 
     public GridInstrumentOptionsScreen(final GridInstrumentScreen screen) {
@@ -71,15 +66,6 @@ public class GridInstrumentOptionsScreen extends InstrumentOptionsScreen {
 
     protected void onRenderBackgroundChanged(final CycleButton<Boolean> button, final boolean value) {
         ModClientConfigs.RENDER_BACKGROUND.set(value);
-    }
-
-
-    // Register this options type as the main configs
-    @SubscribeEvent
-    public static void onClientSetup(final FMLClientSetupEvent event) {
-        ModLoadingContext.get().registerExtensionPoint(ConfigScreenFactory.class,
-            () -> new ConfigScreenFactory((minecraft, screen) -> new GridInstrumentOptionsScreen(screen))
-        );
     }
     
 }

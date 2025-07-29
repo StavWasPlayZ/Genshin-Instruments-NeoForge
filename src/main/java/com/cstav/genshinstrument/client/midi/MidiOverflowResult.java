@@ -1,8 +1,8 @@
 package com.cstav.genshinstrument.client.midi;
 
 import com.cstav.genshinstrument.sound.NoteSound;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public record MidiOverflowResult(
@@ -11,5 +11,5 @@ public record MidiOverflowResult(
     int fixedOctaveNote,
     OverflowType type
 ) {
-    public static enum OverflowType {TOP, BOTTOM}
+    public enum OverflowType {TOP, BOTTOM}
 }

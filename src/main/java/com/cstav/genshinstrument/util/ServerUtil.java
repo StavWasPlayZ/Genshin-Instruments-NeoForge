@@ -3,8 +3,6 @@ package com.cstav.genshinstrument.util;
 import com.cstav.genshinstrument.networking.IModPacket;
 import com.mojang.logging.LogUtils;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.SimpleChannel;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Constructor;

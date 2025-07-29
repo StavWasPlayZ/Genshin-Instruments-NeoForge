@@ -2,8 +2,8 @@ package com.cstav.genshinstrument.client.gui.screen.instrument.partial.note.anim
 
 import com.cstav.genshinstrument.client.AnimationController;
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.note.NoteRing;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class RingAnimationController extends AnimationController {

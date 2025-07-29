@@ -7,8 +7,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.eventbus.api.Cancelable;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 import java.util.Optional;
 
@@ -16,7 +15,6 @@ import java.util.Optional;
  * An abstract implementation of a sound played event.
  * @param <T> The sound object type
  */
-@Cancelable
 public abstract class InstrumentPlayedEvent<T> extends Event {
 
     private final T sound;

@@ -12,9 +12,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -120,7 +120,7 @@ public record HeldNoteSound(
         if (initiatorId.isPresent()) {
             final Entity initiator = level.getEntity(initiatorId.get());
 
-            MinecraftForge.EVENT_BUS.post(
+            NeoForge.EVENT_BUS.post(
                 new HeldNoteSoundPlayedEvent(initiator, this, meta, phase, _initiatorID)
             );
 
@@ -129,7 +129,7 @@ public record HeldNoteSound(
                 return;
         }
 
-        MinecraftForge.EVENT_BUS.post(
+        NeoForge.EVENT_BUS.post(
             new HeldNoteSoundPlayedEvent(level, this, meta, phase, _initiatorID)
         );
 

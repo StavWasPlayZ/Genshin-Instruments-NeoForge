@@ -20,9 +20,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
 import javax.annotation.Nullable;
@@ -157,7 +157,7 @@ public class NoteSound {
         final double playDistSqr = meta.pos().getCenter().distanceToSqr(player.position());
         ClientUtil.stopMusicIfClose(playDistSqr);
 
-        MinecraftForge.EVENT_BUS.post(initiator == null
+        NeoForge.EVENT_BUS.post(initiator == null
             ? new NoteSoundPlayedEvent(level, this, meta)
             : new NoteSoundPlayedEvent(initiator, this, meta)
         );

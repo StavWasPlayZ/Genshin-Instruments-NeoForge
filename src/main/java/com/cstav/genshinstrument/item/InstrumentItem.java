@@ -12,7 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -62,6 +62,8 @@ public class InstrumentItem extends Item {
     public @NotNull UseAnim getUseAnimation(ItemStack pStack) {
         return UseAnim.CUSTOM;
     }
+
+    //TODO: maybe or maybe not convert to event.
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new InstrumentItemClientExt());

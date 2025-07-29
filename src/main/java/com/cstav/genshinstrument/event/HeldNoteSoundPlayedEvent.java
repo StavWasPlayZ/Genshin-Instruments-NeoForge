@@ -7,13 +7,11 @@ import com.cstav.genshinstrument.sound.held.HeldNoteSounds;
 import com.cstav.genshinstrument.sound.held.InitiatorID;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.eventbus.api.Cancelable;
 
 /**
  * An event fired when a {@link HeldNoteSound} has been produced.
  * This event is fired on the Forge event bus
  */
-@Cancelable
 public class HeldNoteSoundPlayedEvent extends InstrumentPlayedEvent<HeldNoteSound> {
     public final HeldSoundPhase phase;
     /**

@@ -7,12 +7,10 @@ import com.cstav.genshinstrument.networking.packet.instrument.s2c.NotifyInstrume
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@EventBusSubscriber(bus = Bus.FORGE, modid = GInstrumentMod.MODID)
+@EventBusSubscriber(modid = GInstrumentMod.MODID)
 public class ModCapabilities {
 
     @SubscribeEvent
