@@ -1,9 +1,46 @@
 package com.cstav.genshinstrument.networking;
 
+import com.cstav.genshinstrument.util.CommonUtil;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.event.network.CustomPayloadEvent.Context;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import org.jetbrains.annotations.NotNull;
 
-public interface IModPacket {
-    default void write(final FriendlyByteBuf buf) {}
-    void handle(final Context context);
+import java.util.Locale;
+
+/**
+ * An interface for all packets under the Genshin Instruments mod.
+ * All its implementers must a constructor that takes a {@link FriendlyByteBuf}.
+ */
+public abstract class IModPacket implements CustomPacketPayload {
+    // Cache this because it's using reflections
+    private final Type<? extends CustomPacketPayload> type = type(getClass());
+
+    public void handleServer(IPayloadContext context) {}
+
+    public void write(RegistryFriendlyByteBuf buf) {}
+
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return type;
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public static <T extends IModPacket> StreamCodec<RegistryFriendlyByteBuf, T> codec(final Class<T> packetType) {
+        return CommonUtil.getStaticFinalField(packetType, "CODEC", StreamCodec.class);
+    }
+
+    public static <T extends IModPacket> CustomPacketPayload.Type<T> type(final Class<T> packetType) {
+        return new Type<>(ResourceLocation.fromNamespaceAndPath(
+            CommonUtil.getStaticFinalField(packetType, "MOD_ID", String.class),
+            path(packetType)
+        ));
+    }
+    public static String path(final Class<? extends IModPacket> packetType) {
+        return packetType.getSimpleName().toLowerCase(Locale.ENGLISH);
+    }
 }

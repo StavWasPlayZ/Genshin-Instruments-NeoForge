@@ -13,22 +13,22 @@ import java.math.RoundingMode;
 import java.util.List;
 
 public abstract class CommonUtil {
-    
+
     /**
      * @return What the default level should've returned, but without any conditions
      */
     public static List<Player> getPlayersInArea(final Level level, final AABB area) {
         final List<Player> list = Lists.newArrayList();
 
-        for (Player player : level.players()) {
+        for(Player player : level.players()) {
             if (area.contains(player.getX(), player.getY(), player.getZ()))
                 list.add(player);
         }
 
         return list;
     }
-    
-    
+
+
     /**
      * @param dir The directory location at which to grab the specified resource
      * @param path The desired path to obtain from the {@code dir}
@@ -59,6 +59,7 @@ public abstract class CommonUtil {
             throw new RuntimeException("Error getting constructor for " + clazz.getName(), e);
         }
     }
+
 
 
     /**
@@ -98,6 +99,29 @@ public abstract class CommonUtil {
     }
 
 
+    @SuppressWarnings("unchecked")
+    public static <T> T getStaticFinalField(final Class<?> clazz, final String name, Class<T> type) {
+        try {
+            return (T) clazz.getDeclaredField(name).get(null);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(
+                "Invalid %s field for %s. Please mark it public static final."
+                    .formatted(name, clazz.getSimpleName()),
+                e);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(
+                "No %s field found for %s. Please make a public static final %s %s in your packet class."
+                    .formatted(name, clazz.getSimpleName(), name, type.getSimpleName()),
+                e);
+        } catch (ClassCastException e) {
+            throw new RuntimeException(
+                "Invalid type found for field %s. It should be of type %s."
+                    .formatted(name, type.getSimpleName()),
+                e);
+        }
+    }
+
+
     /**
      * @return The given {@code value} rounded by the provided {@code places}.
      */
@@ -106,4 +130,5 @@ public abstract class CommonUtil {
             .setScale(places, RoundingMode.HALF_UP)
             .doubleValue();
     }
+
 }

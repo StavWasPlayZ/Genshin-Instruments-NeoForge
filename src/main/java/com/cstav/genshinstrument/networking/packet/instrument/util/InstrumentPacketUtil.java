@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.List;
 import java.util.Optional;
@@ -190,7 +190,7 @@ public class InstrumentPacketUtil {
         final boolean isItem = InstrumentOpenProvider.isItem(player);
 
         // Fire server event
-        MinecraftForge.EVENT_BUS.post(new InstrumentOpenStateChangedEvent(false, player,
+        NeoForge.EVENT_BUS.post(new InstrumentOpenStateChangedEvent(false, player,
             isItem
                 ? Optional.empty()
                 : Optional.of(InstrumentOpenProvider.getBlockPos(player)),
@@ -235,7 +235,7 @@ public class InstrumentPacketUtil {
         );
 
         // Fire server-side event
-        MinecraftForge.EVENT_BUS.post(new InstrumentOpenStateChangedEvent(true, player,
+        NeoForge.EVENT_BUS.post(new InstrumentOpenStateChangedEvent(true, player,
             (pos == null) ? Optional.empty() : Optional.of(pos),
             (pos == null) ? Optional.of(usedHand) : Optional.empty()
         ));

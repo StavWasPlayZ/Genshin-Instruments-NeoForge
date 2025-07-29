@@ -11,21 +11,28 @@ import com.cstav.genshinstrument.client.gui.screen.instrument.partial.Instrument
 import com.cstav.genshinstrument.client.gui.screen.instrument.ukelele.UkuleleScreen;
 import com.cstav.genshinstrument.client.gui.screen.instrument.vintagelyre.VintageLyreScreen;
 import com.cstav.genshinstrument.client.gui.screen.instrument.windsonglyre.WindsongLyreScreen;
+import com.cstav.genshinstrument.client.gui.screen.options.instrument.GridInstrumentOptionsScreen;
+import com.cstav.genshinstrument.demos.GenshinInstruments;
 import com.cstav.genshinstrument.item.clientExtensions.ModItemPredicates;
+import com.cstav.genshinstrument.networking.GIPacketHandler;
+import com.cstav.genshinstrument.networking.IModPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig.Type;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.model.SeparateTransformsModel;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
+@Mod(value = GenshinInstruments.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(value = Dist.CLIENT, modid = GInstrumentMod.MODID)
 public class ClientInitiator {
 
@@ -40,8 +47,15 @@ public class ClientInitiator {
         DjemDjemDrumScreen.INSTRUMENT_ID, DjemDjemDrumScreen::new
     );
 
-    @SubscribeEvent
-    public static void initClient(final FMLClientSetupEvent event) {
+    public ClientInitiator(final ModContainer container) {
+        container.registerExtensionPoint(
+            IConfigScreenFactory.class,
+            (container1, screen) -> new GridInstrumentOptionsScreen(screen)
+        );
+
+        container.registerConfig(Type.CLIENT, ModClientConfigs.CONFIGS);
+
+
         ModArmPose.load();
         ModItemPredicates.register();
 
@@ -49,13 +63,25 @@ public class ClientInitiator {
     }
 
     @SubscribeEvent
-    public static void registerConfigs(final FMLConstructModEvent event) {
-        ModLoadingContext.get().registerConfig(Type.CLIENT, ModClientConfigs.CONFIGS, "instrument_configs.toml");
+    public static void onPayloadRegistration(final RegisterPayloadHandlersEvent event) {
+        //TODO: Move to ServerUtil
+
+        PayloadRegistrar registrar = event.registrar(GInstrumentMod.MODID)
+            .versioned(GIPacketHandler.PROTOCOL_VERSION);
+
+        for (final Class<IModPacket> c2sPacketClass : GIPacketHandler.ACCEPTABLE_PACKETS_C2S) {
+            registrar = registrar.playToServer(
+                IModPacket.type(c2sPacketClass),
+                IModPacket.codec(c2sPacketClass),
+                (iModPacket, context) ->
+                    context.enqueueWork(() -> iModPacket.handleServer(context))
+            );
+        }
     }
 
     @SubscribeEvent
     public static void modelLoadEvent(final ModelEvent.RegisterGeometryLoaders event) {
-        event.register( GInstrumentMod.loc("separate_transforms"), SeparateTransformsModel.Loader.INSTANCE);
+        event.register(GInstrumentMod.loc("separate_transforms"), SeparateTransformsModel.Loader.INSTANCE);
     }
 
 }

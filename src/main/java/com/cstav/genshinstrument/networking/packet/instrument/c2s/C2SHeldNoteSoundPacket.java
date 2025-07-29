@@ -1,5 +1,6 @@
 package com.cstav.genshinstrument.networking.packet.instrument.c2s;
 
+import com.cstav.genshinstrument.GInstrumentMod;
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.note.NoteButton;
 import com.cstav.genshinstrument.event.HeldNoteSoundPlayedEvent;
 import com.cstav.genshinstrument.networking.packet.instrument.NoteSoundMetadata;
@@ -10,9 +11,12 @@ import com.cstav.genshinstrument.sound.held.HeldNoteSound;
 import com.cstav.genshinstrument.sound.held.HeldNoteSounds;
 import com.cstav.genshinstrument.sound.held.InitiatorID;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * A C2S packet notifying the server that a
@@ -27,6 +31,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * Only the client knows which sounds are playing at the moment - not the server.
  */
 public class C2SHeldNoteSoundPacket extends C2SNotePacket<HeldNoteSound> {
+
+    public static final String MOD_ID = GInstrumentMod.MODID;
+    public static final StreamCodec<RegistryFriendlyByteBuf, C2SHeldNoteSoundPacket> CODEC = CustomPacketPayload.codec(
+        C2SHeldNoteSoundPacket::write,
+        C2SHeldNoteSoundPacket::new
+    );
 
     public final HeldSoundPhase phase;
 

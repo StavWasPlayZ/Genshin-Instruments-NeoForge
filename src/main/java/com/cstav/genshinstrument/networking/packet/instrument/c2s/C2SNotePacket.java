@@ -7,6 +7,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.Optional;
 
@@ -15,8 +16,7 @@ import java.util.Optional;
  * notifying that a specific note should be played in the level
  * @param <T> The sound object type
  */
-public abstract class C2SNotePacket<T> implements IModPacket {
-    public static final NetworkDirection NETWORK_DIRECTION = NetworkDirection.PLAY_TO_SERVER;
+public abstract class C2SNotePacket<T> extends IModPacket {
 
     public final T sound;
     public final NoteSoundMetadata meta;
@@ -52,8 +52,8 @@ public abstract class C2SNotePacket<T> implements IModPacket {
 
 
     @Override
-    public void handle(final Context context) {
-        final ServerPlayer player = context.getSender();
+    public void handleServer(final IPayloadContext context) {
+        final ServerPlayer player = (ServerPlayer) context.player();
         sendPlayNotePackets(player);
     }
     protected abstract void sendPlayNotePackets(final ServerPlayer player);

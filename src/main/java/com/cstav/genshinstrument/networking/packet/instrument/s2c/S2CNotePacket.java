@@ -3,7 +3,7 @@ package com.cstav.genshinstrument.networking.packet.instrument.s2c;
 import com.cstav.genshinstrument.networking.IModPacket;
 import com.cstav.genshinstrument.networking.packet.instrument.NoteSoundMetadata;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkDirection;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 
 import java.util.Optional;
 
@@ -12,9 +12,7 @@ import java.util.Optional;
  * a specific note.
  * @param <T> The sound object type
  */
-public abstract class S2CNotePacket<T> implements IModPacket {
-    public static final NetworkDirection NETWORK_DIRECTION = NetworkDirection.PLAY_TO_CLIENT;
-
+public abstract class S2CNotePacket<T> extends IModPacket {
     public final Optional<Integer> initiatorID;
     public final T sound;
     public final NoteSoundMetadata meta;
@@ -36,7 +34,7 @@ public abstract class S2CNotePacket<T> implements IModPacket {
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
+    public void write(RegistryFriendlyByteBuf buf) {
         buf.writeOptional(initiatorID, FriendlyByteBuf::writeInt);
         writeSound(buf);
         meta.write(buf);

@@ -1,11 +1,14 @@
 package com.cstav.genshinstrument.networking.packet.instrument.s2c;
 
+import com.cstav.genshinstrument.GInstrumentMod;
 import com.cstav.genshinstrument.networking.packet.instrument.NoteSoundMetadata;
 import com.cstav.genshinstrument.networking.packet.instrument.util.HeldSoundPhase;
 import com.cstav.genshinstrument.sound.held.HeldNoteSound;
 import com.cstav.genshinstrument.sound.held.InitiatorID;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.event.network.CustomPayloadEvent.Context;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 import java.util.Optional;
 
@@ -14,6 +17,12 @@ import java.util.Optional;
  * a specific {@link HeldNoteSound}.
  */
 public class S2CHeldNoteSoundPacket extends S2CNotePacket<HeldNoteSound> {
+    public static final String MOD_ID = GInstrumentMod.MODID;
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2CHeldNoteSoundPacket> CODEC = CustomPacketPayload.codec(
+        S2CHeldNoteSoundPacket::write,
+        S2CHeldNoteSoundPacket::new
+    );
+
 
     public final HeldSoundPhase phase;
     /**
@@ -40,7 +49,7 @@ public class S2CHeldNoteSoundPacket extends S2CNotePacket<HeldNoteSound> {
         this.oInitiatorID = buf.readOptional(InitiatorID::readFromNetwork);
     }
     @Override
-    public void write(FriendlyByteBuf buf) {
+    public void write(RegistryFriendlyByteBuf buf) {
         super.write(buf);
         buf.writeEnum(phase);
         buf.writeOptional(oInitiatorID, (fbb, initId) -> initId.writeToNetwork(fbb));
@@ -53,11 +62,5 @@ public class S2CHeldNoteSoundPacket extends S2CNotePacket<HeldNoteSound> {
     @Override
     protected HeldNoteSound readSound(FriendlyByteBuf buf) {
         return HeldNoteSound.readFromNetwork(buf);
-    }
-
-
-    @Override
-    public void handle(final Context context) {
-        sound.playFromServer(initiatorID, oInitiatorID, meta, phase);
     }
 }

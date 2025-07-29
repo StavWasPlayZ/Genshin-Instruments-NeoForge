@@ -2,7 +2,6 @@ package com.cstav.genshinstrument;
 
 import com.cstav.genshinstrument.criteria.ModCriteria;
 import com.cstav.genshinstrument.item.GIItems;
-import com.cstav.genshinstrument.networking.GIPacketHandler;
 import com.cstav.genshinstrument.networking.buttonidentifier.DjemDjemDrumNoteIdentifier;
 import com.cstav.genshinstrument.networking.buttonidentifier.GloriousDrumNoteIdentifier;
 import com.cstav.genshinstrument.networking.buttonidentifier.NoteButtonIdentifiers;
@@ -33,7 +32,6 @@ public class GInstrumentMod
 
     public GInstrumentMod(IEventBus bus, ModContainer modContainer)
     {
-        GIPacketHandler.registerPackets();
         NoteButtonIdentifiers.register(
             NoteGridButtonIdentifier.class,
             GloriousDrumNoteIdentifier.class,

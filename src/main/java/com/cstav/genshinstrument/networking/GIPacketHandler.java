@@ -9,47 +9,56 @@ import com.cstav.genshinstrument.networking.packet.instrument.s2c.NotifyInstrume
 import com.cstav.genshinstrument.networking.packet.instrument.s2c.OpenInstrumentPacket;
 import com.cstav.genshinstrument.networking.packet.instrument.s2c.S2CHeldNoteSoundPacket;
 import com.cstav.genshinstrument.networking.packet.instrument.s2c.S2CNoteSoundPacket;
-import com.cstav.genshinstrument.util.ServerUtil;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 import java.util.List;
 
 @EventBusSubscriber(modid = GInstrumentMod.MODID)
 public class GIPacketHandler {
     @SuppressWarnings("unchecked")
-    public static final List<Class<IModPacket>> ACCEPTABLE_PACKETS = List.of(new Class[] {
-        NotifyInstrumentOpenPacket.class,
-        C2SNoteSoundPacket.class, S2CNoteSoundPacket.class,
-        OpenInstrumentPacket.class, CloseInstrumentPacket.class,
-        C2SHeldNoteSoundPacket.class, S2CHeldNoteSoundPacket.class,
+    public static final List<Class<IModPacket>> ACCEPTABLE_PACKETS_C2S = List.of(new Class[] {
+        C2SNoteSoundPacket.class,
+        CloseInstrumentPacket.class,
+        C2SHeldNoteSoundPacket.class,
         ReqInstrumentOpenStatePacket.class
     });
 
-    private static int id = 0;
-    public static void registerPackets() {
-        ServerUtil.registerModPackets(INSTANCE, ACCEPTABLE_PACKETS, () -> id++);
+    @SuppressWarnings("unchecked")
+    public static final List<Class<IModPacket>> ACCEPTABLE_PACKETS_S2C = List.of(new Class[] {
+        NotifyInstrumentOpenPacket.class,
+        S2CNoteSoundPacket.class,
+        OpenInstrumentPacket.class,
+        S2CHeldNoteSoundPacket.class
+    });
+
+
+    public static final String PROTOCOL_VERSION = "5.0";
+
+    @SubscribeEvent
+    public static void onPayloadRegistration(final RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar(GInstrumentMod.MODID)
+            .versioned(PROTOCOL_VERSION);
+
+        for (final Class<IModPacket> c2sPacketClass : ACCEPTABLE_PACKETS_C2S) {
+            registrar = registrar.playToServer(
+                IModPacket.type(c2sPacketClass),
+                IModPacket.codec(c2sPacketClass),
+                (iModPacket, context) ->
+                    context.enqueueWork(() -> iModPacket.handleServer(context))
+            );
+        }
     }
 
 
-    private static final String PROTOCOL_VERSION = "5.1";
-
-    private static int protocolVersion() {
-        return Integer.parseInt(PROTOCOL_VERSION.replace(".", ""));
+    public static void sendToServer(final IModPacket packet) {
+        PacketDistributor.sendToServer(packet);
     }
-    
-
-    private static final SimpleChannel INSTANCE = ChannelBuilder
-        .named(GInstrumentMod.loc("main"))
-        .networkProtocolVersion(protocolVersion())
-        .acceptedVersions(VersionTest.exact(protocolVersion()))
-    .simpleChannel();
-
-
-    public static <T> void sendToServer(final T packet) {
-        INSTANCE.send(packet, PacketDistributor.SERVER.noArg());
-    }
-    public static <T> void sendToClient(final T packet, final ServerPlayer player) {
-        INSTANCE.send(packet, PacketDistributor.PLAYER.with(player));
+    public static void sendToClient(final IModPacket packet, final ServerPlayer player) {
+        PacketDistributor.sendToPlayer(player, packet);
     }
 }

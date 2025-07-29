@@ -1,47 +1,68 @@
 package com.cstav.genshinstrument.util;
 
 import com.cstav.genshinstrument.networking.IModPacket;
-import com.mojang.logging.LogUtils;
-import net.minecraft.network.FriendlyByteBuf;
-import org.slf4j.Logger;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-import java.lang.reflect.Constructor;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 
 public class ServerUtil {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    public static final int PLAY_DISTANCE = 16;
 
+//    public static void registerCodecs(
+//        List<Class<IModPacket>> c2sPacketTypes,
+//        List<Class<IModPacket>> s2cPacketTypes
+//    ) {
+//        ServerUtil.registerCodecs(PayloadTypeRegistry.playC2S(), c2sPacketTypes);
+//        ServerUtil.registerCodecs(PayloadTypeRegistry.playS2C(), s2cPacketTypes);
+//    }
+//
+//    public static void registerCodecs(PayloadTypeRegistry<RegistryFriendlyByteBuf> registry, List<Class<IModPacket>> packetTypes) {
+//        for (final Class<IModPacket> packetClass : packetTypes) {
+//            registry.register(
+//                IModPacket.type(packetClass),
+//                IModPacket.codec(packetClass)
+//            );
+//        }
+//    }
+//
+//
+//    public static void registerServerPackets(final List<Class<IModPacket>> packetTypes) {
+//        for (final Class<IModPacket> packetClass : packetTypes) {
+//            ServerPlayNetworking.registerGlobalReceiver(
+//                IModPacket.type(packetClass),
+//                IModPacket::handleServer
+//            );
+//        }
+//    }
 
-    public static void registerModPackets(SimpleChannel sc, List<Class<IModPacket>> acceptablePackets, Supplier<Integer> id) {
-        for (final Class<IModPacket> packetType : acceptablePackets)
-            try {
+    @SuppressWarnings("unchecked")
+    public static void registerClientPackets(
+        final List<Class<IModPacket>> packetTypes,
+        Map<String, BiConsumer<? extends IModPacket, IPayloadContext>> packetSwitch,
 
-                final Constructor<IModPacket> packetConstructor = packetType.getDeclaredConstructor(FriendlyByteBuf.class);
-                
-                sc.messageBuilder(packetType, id.get(), getDirection(packetType))
-                    .encoder(IModPacket::write)
-                    .decoder((buf) -> {
-                        try {
-                            return packetConstructor.newInstance(buf);
-                        } catch (Exception e) {
-                            LOGGER.error("Error constructing packet of type {}", packetType.getName(), e);
-                            return null;
-                        }
-                    })
-                    .consumerMainThread(IModPacket::handle)
-                .add();
+    ) {
+        for (final Class<IModPacket> packetClass : packetTypes) {
+            ClientPlayNetworking.registerGlobalReceiver(
+                IModPacket.type(packetClass),
+                (packet, context) -> {
+                    final BiConsumer<? extends IModPacket, IPayloadContext> packetHandler = packetSwitch.get(packet.type().id().getPath());
 
-            } catch (Exception e) {
-                LOGGER.error(
-                    "Error registering packet of type "+packetType.getName()
-                        +". Make sure to have a NETWORK_DIRECTION static field of type NetworkDirection."
-                , e);
-            }
+                    // Trust me bro, it HAS to be extending IModPacket.
+                    // It's an abstract class.
+                    ((BiConsumer<IModPacket, IPayloadContext>) packetHandler)
+                        .accept(packet, context);
+                }
+            );
+        }
     }
-    private static NetworkDirection<? extends FriendlyByteBuf> getDirection(final Class<IModPacket> packetType)
-            throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-        return (NetworkDirection<? extends FriendlyByteBuf>)packetType.getField("NETWORK_DIRECTION").get(null);
+
+    public static <T extends IModPacket> Entry<String, BiConsumer<T, IPayloadContext>> switchEntry(
+        BiConsumer<T, IPayloadContext> handler,
+        final Class<T> packetType
+    ) {
+        return Map.entry(IModPacket.path(packetType), handler);
     }
+
 }

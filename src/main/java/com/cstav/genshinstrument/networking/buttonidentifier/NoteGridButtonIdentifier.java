@@ -2,8 +2,8 @@ package com.cstav.genshinstrument.networking.buttonidentifier;
 
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.note.grid.NoteGridButton;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class NoteGridButtonIdentifier extends NoteButtonIdentifier {
 

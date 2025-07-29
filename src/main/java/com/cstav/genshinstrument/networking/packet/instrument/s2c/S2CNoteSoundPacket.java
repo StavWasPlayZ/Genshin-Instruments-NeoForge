@@ -1,9 +1,12 @@
 package com.cstav.genshinstrument.networking.packet.instrument.s2c;
 
+import com.cstav.genshinstrument.GInstrumentMod;
 import com.cstav.genshinstrument.networking.packet.instrument.NoteSoundMetadata;
 import com.cstav.genshinstrument.sound.NoteSound;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.event.network.CustomPayloadEvent.Context;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 import java.util.Optional;
 
@@ -12,6 +15,13 @@ import java.util.Optional;
  * a specific {@link NoteSound}.
  */
 public class S2CNoteSoundPacket extends S2CNotePacket<NoteSound> {
+    public static final String MOD_ID = GInstrumentMod.MODID;
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2CNoteSoundPacket> CODEC = CustomPacketPayload.codec(
+        S2CNoteSoundPacket::write,
+        S2CNoteSoundPacket::new
+    );
+
+
     /**
      * Constructs a new {@link S2CNoteSoundPacket}.
      * @param initiatorID The UUID of the player initiating the sound.
@@ -31,10 +41,5 @@ public class S2CNoteSoundPacket extends S2CNotePacket<NoteSound> {
     @Override
     protected NoteSound readSound(FriendlyByteBuf buf) {
         return NoteSound.readFromNetwork(buf);
-    }
-
-    @Override
-    public void handle(final Context context) {
-        sound.playFromServer(initiatorID, meta);
     }
 }

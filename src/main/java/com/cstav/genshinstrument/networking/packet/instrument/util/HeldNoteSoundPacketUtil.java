@@ -9,7 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.Optional;
 
@@ -93,7 +93,7 @@ public class HeldNoteSoundPacketUtil {
 
 
     private static void fireEntityEvent(Entity initiator, S2CHeldNoteSoundPacket packet) {
-        MinecraftForge.EVENT_BUS.post(
+        NeoForge.EVENT_BUS.post(
             new HeldNoteSoundPlayedEvent(
                 initiator,
                 packet.sound, packet.meta,
@@ -103,7 +103,7 @@ public class HeldNoteSoundPacketUtil {
         );
     }
     private static void fireGenericEvent(Level level, S2CHeldNoteSoundPacket packet) {
-        MinecraftForge.EVENT_BUS.post(
+        NeoForge.EVENT_BUS.post(
             new HeldNoteSoundPlayedEvent(
                 level,
                 packet.sound, packet.meta,

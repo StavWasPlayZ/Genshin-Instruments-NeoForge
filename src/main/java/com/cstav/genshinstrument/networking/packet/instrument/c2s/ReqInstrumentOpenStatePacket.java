@@ -1,14 +1,24 @@
 package com.cstav.genshinstrument.networking.packet.instrument.c2s;
 
+import com.cstav.genshinstrument.GInstrumentMod;
 import com.cstav.genshinstrument.capability.ModCapabilities;
 import com.cstav.genshinstrument.networking.IModPacket;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.UUID;
 
-public class ReqInstrumentOpenStatePacket implements IModPacket {
-    public static final NetworkDirection NETWORK_DIRECTION = NetworkDirection.PLAY_TO_SERVER;
+public class ReqInstrumentOpenStatePacket extends IModPacket {
+    public static final String MOD_ID = GInstrumentMod.MODID;
+    public static final StreamCodec<RegistryFriendlyByteBuf, ReqInstrumentOpenStatePacket> CODEC = CustomPacketPayload.codec(
+        ReqInstrumentOpenStatePacket::write,
+        ReqInstrumentOpenStatePacket::new
+    );
+
 
     private final UUID uuid;
 
@@ -25,8 +35,8 @@ public class ReqInstrumentOpenStatePacket implements IModPacket {
     }
 
     @Override
-    public void handle(final Context context) {
-        final ServerPlayer player = context.getSender();
+    public void handleServer(final IPayloadContext context) {
+        final ServerPlayer player = (ServerPlayer) context.player();
         ModCapabilities.notifyOpenStateToPlayer(player.level().getPlayerByUUID(uuid), player);
     }
 }

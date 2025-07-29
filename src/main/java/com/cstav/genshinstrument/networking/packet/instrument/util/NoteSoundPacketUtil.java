@@ -8,7 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 
 /**
  * A helper class for dealing with {@link NoteSound} packets.
@@ -80,12 +80,12 @@ public class NoteSoundPacketUtil {
 
 
     private static void firePlayerEvent(Entity initiator, S2CNoteSoundPacket packet) {
-        MinecraftForge.EVENT_BUS.post(
+        NeoForge.EVENT_BUS.post(
             new NoteSoundPlayedEvent(initiator, packet.sound, packet.meta)
         );
     }
     private static void fireGenericEvent(Level level, S2CNoteSoundPacket packet) {
-        MinecraftForge.EVENT_BUS.post(
+        NeoForge.EVENT_BUS.post(
             new NoteSoundPlayedEvent(level, packet.sound, packet.meta)
         );
     }

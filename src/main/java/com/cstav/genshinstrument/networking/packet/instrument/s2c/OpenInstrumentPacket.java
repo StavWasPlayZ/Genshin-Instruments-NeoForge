@@ -1,19 +1,25 @@
 package com.cstav.genshinstrument.networking.packet.instrument.s2c;
 
-import com.cstav.genshinstrument.client.gui.screen.instrument.InstrumentScreenRegistry;
+import com.cstav.genshinstrument.GInstrumentMod;
 import com.cstav.genshinstrument.networking.IModPacket;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.api.distmarker.Dist;
 
 /**
  * A S2C packet telling the target client
  * to open a specific instrument screen
  */
-public class OpenInstrumentPacket implements IModPacket {
-    public static final NetworkDirection NETWORK_DIRECTION = NetworkDirection.PLAY_TO_CLIENT;
+public class OpenInstrumentPacket extends IModPacket {
+    public static final String MOD_ID = GInstrumentMod.MODID;
+    public static final StreamCodec<RegistryFriendlyByteBuf, OpenInstrumentPacket> CODEC = CustomPacketPayload.codec(
+        OpenInstrumentPacket::write,
+        OpenInstrumentPacket::new
+    );
 
-    private final ResourceLocation instrumentType;
+    public final ResourceLocation instrumentType;
     public OpenInstrumentPacket(final ResourceLocation instrumentScreen) {
         this.instrumentType = instrumentScreen;
     }
@@ -23,15 +29,7 @@ public class OpenInstrumentPacket implements IModPacket {
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
+    public void write(RegistryFriendlyByteBuf buf) {
         buf.writeResourceLocation(instrumentType);
-    }
-
-
-    @Override
-    public void handle(final Context context) {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-            InstrumentScreenRegistry.setScreenByID(instrumentType)
-        );
     }
 }

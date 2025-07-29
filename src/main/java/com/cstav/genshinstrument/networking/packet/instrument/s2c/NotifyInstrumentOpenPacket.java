@@ -1,16 +1,13 @@
 package com.cstav.genshinstrument.networking.packet.instrument.s2c;
 
-import com.cstav.genshinstrument.capability.instrumentOpen.InstrumentOpenProvider;
-import com.cstav.genshinstrument.event.InstrumentOpenStateChangedEvent;
+import com.cstav.genshinstrument.GInstrumentMod;
 import com.cstav.genshinstrument.networking.IModPacket;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.network.CustomPayloadEvent.Context;
-import net.minecraftforge.network.NetworkDirection;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,14 +16,18 @@ import java.util.UUID;
  * A S2C packet to update the {@code instrument open} state
  * of a certain player
  */
-public class NotifyInstrumentOpenPacket implements IModPacket {
-    public static final NetworkDirection NETWORK_DIRECTION = NetworkDirection.PLAY_TO_CLIENT;
+public class NotifyInstrumentOpenPacket extends IModPacket {
+    public static final String MOD_ID = GInstrumentMod.MODID;
+    public static final StreamCodec<RegistryFriendlyByteBuf, NotifyInstrumentOpenPacket> CODEC = CustomPacketPayload.codec(
+        NotifyInstrumentOpenPacket::write,
+        NotifyInstrumentOpenPacket::new
+    );
 
 
-    private final UUID playerUUID;
-    private final boolean isOpen;
-    private final Optional<BlockPos> pos;
-    private final Optional<InteractionHand> hand;
+    public final UUID playerUUID;
+    public final boolean isOpen;
+    public final Optional<BlockPos> pos;
+    public final Optional<InteractionHand> hand;
 
     /**
      * Constructs packet notifying of a closed instrument
@@ -70,30 +71,11 @@ public class NotifyInstrumentOpenPacket implements IModPacket {
     }
     
     @Override
-    public void write(FriendlyByteBuf buf) {
+    public void write(final RegistryFriendlyByteBuf buf) {
         buf.writeUUID(playerUUID);
         buf.writeBoolean(isOpen);
         buf.writeOptional(pos, (fbb, pos) -> fbb.writeBlockPos(pos));
         buf.writeOptional(hand, FriendlyByteBuf::writeEnum);
-    }
-
-
-    @Override
-    public void handle(final Context context) {
-        final Player player = Minecraft.getInstance().level.getPlayerByUUID(playerUUID);
-
-        if (isOpen) {
-
-            if (pos.isPresent()) // is block instrument
-                InstrumentOpenProvider.setOpen(player, pos.get());
-            else // is item instrument
-                InstrumentOpenProvider.setOpen(player, hand.get());
-
-        } else {
-            InstrumentOpenProvider.setClosed(player);
-        }
-
-        MinecraftForge.EVENT_BUS.post(new InstrumentOpenStateChangedEvent(isOpen, player, pos, hand));
     }
     
 }
