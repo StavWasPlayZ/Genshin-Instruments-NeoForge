@@ -41,6 +41,7 @@ public class GenshinConsentScreen extends WarningScreen {
     protected Layout addFooterButtons() {
         final Button acknowledgeButton = Button.builder(CommonComponents.GUI_ACKNOWLEDGE, (button) -> {
             ModClientConfigs.ACCEPTED_GENSHIN_CONSENT.set(true);
+            ModClientConfigs.ACCEPTED_GENSHIN_CONSENT.save();
             minecraft.setScreen(previousScreen);
         }).build();
 
