@@ -4,10 +4,10 @@ import com.cstav.genshinstrument.GInstrumentMod;
 import com.cstav.genshinstrument.event.InstrumentPlayedEvent;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -35,9 +35,9 @@ public class ModCriteria {
         if (!event.isByPlayer())
             return;
 
-        final Item instrument = Registries.ITEM.getValue(event.soundMeta().instrumentId());
+        final Item instrument = BuiltInRegistries.ITEM.get(event.soundMeta().instrumentId());
         // Perhaps troll packets
-        if (instrument == null)
+        if (instrument == Items.AIR)
             return;
 
         INSTRUMENT_PLAYED_TRIGGER.get().trigger(

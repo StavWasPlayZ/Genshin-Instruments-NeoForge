@@ -5,7 +5,7 @@ import com.cstav.genshinstrument.client.gui.screen.instrument.partial.grid.GridI
 import com.cstav.genshinstrument.sound.held.HeldNoteSound;
 import com.cstav.genshinstrument.sound.registrar.HeldNoteSoundRegistrar;
 import com.cstav.genshinstrument.sound.registrar.NoteSoundRegistrar;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.neoforged.bus.api.IEventBus;
@@ -13,7 +13,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class GISounds {
     
-    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, GInstrumentMod.MODID);
+    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, GInstrumentMod.MODID);
     public static void register(final IEventBus bus) {
         SOUNDS.register(bus);
     }

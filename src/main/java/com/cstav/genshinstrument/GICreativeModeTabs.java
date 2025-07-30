@@ -1,7 +1,7 @@
 package com.cstav.genshinstrument;
 
 import com.cstav.genshinstrument.item.GIItems;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +13,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 @EventBusSubscriber(modid = GInstrumentMod.MODID)
 public class GICreativeModeTabs {
 
-    private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, GInstrumentMod.MODID);
+    private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB, GInstrumentMod.MODID);
 
     public static void regsiter(final IEventBus bus) {
         TABS.register(bus);

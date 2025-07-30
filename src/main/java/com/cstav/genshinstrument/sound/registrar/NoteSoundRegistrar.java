@@ -5,7 +5,7 @@ import com.cstav.genshinstrument.sound.NoteSound;
 import com.cstav.genshinstrument.sound.registrar.impl.ChainableNoteSoundRegistrar;
 import com.cstav.genshinstrument.sound.registrar.impl.ChainedNoteSoundRegistrar;
 import com.mojang.logging.LogUtils;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -100,7 +100,7 @@ public class NoteSoundRegistrar extends ChainableNoteSoundRegistrar<NoteSound, N
      */
     protected void setSoundField(Function<SoundEvent, SoundEvent> fieldConsumer, ResourceLocation soundLocation) {
         if (getBool(paramsMap, "ALREADY_REGISTERED")) {
-            fieldConsumer.apply(Registries.SOUND_EVENT.getValue(soundLocation));
+            fieldConsumer.apply(BuiltInRegistries.SOUND_EVENT.get(soundLocation));
         } else {
             soundRegistrar.register(soundLocation.getPath(), () ->
                 fieldConsumer.apply(SoundEvent.createVariableRangeEvent(soundLocation))
