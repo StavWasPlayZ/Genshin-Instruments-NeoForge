@@ -7,13 +7,16 @@
         },
         "X": {
             "item": "minecraft:leather"
+        },
+        "S": {
+            "item": "minecraft:string"
         }
     },
 
     "pattern": [
         " #X",
-        " ##",
-        "#  "
+        "S##",
+        "#S "
     ],
 
     "result": {
