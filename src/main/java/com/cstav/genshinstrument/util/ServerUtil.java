@@ -86,6 +86,9 @@ public class ServerUtil {
     }
 
     public static void notifyOpenStateToPlayer(final Player player, final ServerPlayer target) {
+        if (!InstrumentOpenProvider.isOpen(player))
+            return;
+
         final NotifyInstrumentOpenPacket packet;
 
         if (InstrumentOpenProvider.isItem(player)) {

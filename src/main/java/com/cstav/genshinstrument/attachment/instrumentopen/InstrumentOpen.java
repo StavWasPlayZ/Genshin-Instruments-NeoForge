@@ -18,7 +18,7 @@ public class InstrumentOpen implements INBTSerializable<CompoundTag> {
         IS_ITEM_TAG = "IsItem",
         BLOCK_POS_TAG = "BlockPos",
         HAND_TAG = "InOffhand"
-            ;
+    ;
 
     private boolean isOpen = false, isItem = false;
     private BlockPos blockPos;
