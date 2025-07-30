@@ -13,7 +13,6 @@ import com.cstav.genshinstrument.client.gui.screen.instrument.vintagelyre.Vintag
 import com.cstav.genshinstrument.client.gui.screen.instrument.windsonglyre.WindsongLyreScreen;
 import com.cstav.genshinstrument.client.gui.screen.options.instrument.GridInstrumentOptionsScreen;
 import com.cstav.genshinstrument.item.clientExtensions.ModItemPredicates;
-import com.cstav.genshinstrument.networking.GIPacketHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -24,7 +23,6 @@ import net.neoforged.fml.config.ModConfig.Type;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.model.SeparateTransformsModel;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -57,11 +55,6 @@ public class ClientInitiator {
         ModItemPredicates.register();
 
         InstrumentScreenRegistry.register(INSTRUMENTS);
-    }
-
-    @SubscribeEvent
-    public static void onPayloadRegistration(final RegisterPayloadHandlersEvent event) {
-        GIPacketHandler.registerClientPackets();
     }
 
     @SubscribeEvent

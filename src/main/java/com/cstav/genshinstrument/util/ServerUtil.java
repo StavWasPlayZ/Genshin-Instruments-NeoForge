@@ -16,8 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 public class ServerUtil {
+
     public static void registerC2SPackets(List<Class<IModPacket>> packetTypes, PayloadRegistrar payloadRegistrar) {
         for (final Class<IModPacket> packetClass : packetTypes) {
             payloadRegistrar.playToServer(
@@ -30,10 +32,9 @@ public class ServerUtil {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static void registerS2CPackets(
         final List<Class<IModPacket>> packetTypes,
-        Map<String, BiConsumer<? extends IModPacket, IPayloadContext>> packetSwitch,
+        Supplier<Map<String, BiConsumer<? extends IModPacket, IPayloadContext>>> packetSwitchSupplier,
         PayloadRegistrar payloadRegistrar
     ) {
         for (final Class<IModPacket> packetClass : packetTypes) {
@@ -41,7 +42,8 @@ public class ServerUtil {
                 IModPacket.type(packetClass),
                 IModPacket.codec(packetClass),
 
-                (packet, context) -> executeClientPacketHandler(packet, context, packetSwitch)
+                (packet, context) ->
+                    executeClientPacketHandler(packet, context, packetSwitchSupplier)
             );
         }
     }
@@ -50,10 +52,10 @@ public class ServerUtil {
     @SuppressWarnings("unchecked")
     private static void executeClientPacketHandler(
         final IModPacket packet, final IPayloadContext context,
-        Map<String, BiConsumer<? extends IModPacket, IPayloadContext>> packetSwitch
+        Supplier<Map<String, BiConsumer<? extends IModPacket, IPayloadContext>>> packetSwitchSupplier
     ) {
         final BiConsumer<? extends IModPacket, IPayloadContext> packetHandler =
-            packetSwitch.get(packet.type().id().getPath());
+            packetSwitchSupplier.get().get(packet.type().id().getPath());
 
         // It HAS to be extending IModPacket.
         // It's an abstract class.

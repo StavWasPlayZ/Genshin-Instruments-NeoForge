@@ -12,8 +12,6 @@ import com.cstav.genshinstrument.networking.packet.instrument.s2c.S2CNoteSoundPa
 import com.cstav.genshinstrument.networking.packet.instrument.util.ClientDistExec;
 import com.cstav.genshinstrument.util.ServerUtil;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -47,12 +45,7 @@ public class GIPacketHandler {
     @SubscribeEvent
     public static void onPayloadRegistration(final RegisterPayloadHandlersEvent event) {
         ServerUtil.registerC2SPackets(ACCEPTABLE_PACKETS_C2S, payloadRegistrar);
-    }
-
-
-    @OnlyIn(Dist.CLIENT)
-    public static void registerClientPackets() {
-        ServerUtil.registerS2CPackets(ACCEPTABLE_PACKETS_S2C, ClientDistExec.PACKET_SWITCH, payloadRegistrar);
+        ServerUtil.registerS2CPackets(ACCEPTABLE_PACKETS_S2C, () -> ClientDistExec.PACKET_SWITCH, payloadRegistrar);
     }
 
 
