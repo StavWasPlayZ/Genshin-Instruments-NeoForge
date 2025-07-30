@@ -1,8 +1,8 @@
 {
     "entries": [
         {
-            "enum": "net/minecraft/client/model/HumanoidModel.ArmPose",
-            "name": "PLAYING_ITEM_INSTRUMENT",
+            "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+            "name": "GENSHINSTRUMENT_PLAYING_ITEM_INSTRUMENT",
 
             "constructor": "(ZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
             "parameters": {
@@ -11,8 +11,8 @@
             }
         },
         {
-            "enum": "net/minecraft/client/model/HumanoidModel.ArmPose",
-            "name": "PLAYING_BLOCK_INSTRUMENT",
+            "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+            "name": "GENSHINSTRUMENT_PLAYING_BLOCK_INSTRUMENT",
 
             "constructor": "(ZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
             "parameters": {
@@ -21,8 +21,8 @@
             }
         },
         {
-            "enum": "net/minecraft/client/model/HumanoidModel.ArmPose",
-            "name": "PLAYING_WIND_INSTRUMENT",
+            "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+            "name": "GENSHINSTRUMENT_PLAYING_WIND_INSTRUMENT",
 
             "constructor": "(ZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
             "parameters": {
@@ -31,8 +31,8 @@
             }
         },
         {
-            "enum": "net/minecraft/client/model/HumanoidModel.ArmPose",
-            "name": "PLAYING_NIGHTWIND_HORN_INSTRUMENT",
+            "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+            "name": "GENSHINSTRUMENT_PLAYING_NIGHTWIND_HORN_INSTRUMENT",
 
             "constructor": "(ZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
             "parameters": {
