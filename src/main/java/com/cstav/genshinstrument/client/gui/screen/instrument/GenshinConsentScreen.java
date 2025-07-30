@@ -15,7 +15,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * @implNote
- * This screen was heavily inspired by <a href=https://ko-fi.com/s/665c3cc518>Kistu-Lyre+</a>'s Disclaimer screen.
+ * This screen was inspired by <a href=https://ko-fi.com/s/665c3cc518>Kistu-Lyre+</a>'s Disclaimer screen.
  * Please consider supporting them on Ko-fi!
  */
 @OnlyIn(Dist.CLIENT)
@@ -24,7 +24,6 @@ public class GenshinConsentScreen extends WarningScreen {
     private static final Component TITLE = Component.translatable(
         "genshinstrument.genshin_disclaimer.title"
     ).withStyle(ChatFormatting.BOLD);
-    // Can't create object field because of constructor
     private static final MutableComponent CONTENT = Component.translatable(
         "genshinstrument.genshin_disclaimer.content", boldenAll(2)
     );
@@ -55,7 +54,7 @@ public class GenshinConsentScreen extends WarningScreen {
         return linearlayout;
     }
 
-    //    @Override
+//    @Override
 //    protected void renderTitle(GuiGraphics gui) {
 //        gui.drawCenteredString(font, title, width/2, 30, Color.WHITE.getRGB());
 //    }
