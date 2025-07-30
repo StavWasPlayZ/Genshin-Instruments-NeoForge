@@ -1,6 +1,5 @@
 package com.cstav.genshinstrument.client.gui.screen.options.instrument;
 
-import com.cstav.genshinstrument.GInstrumentMod;
 import com.cstav.genshinstrument.client.config.ModClientConfigs;
 import com.cstav.genshinstrument.client.config.enumType.NoteGridLabel;
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.grid.GridInstrumentScreen;
@@ -12,10 +11,7 @@ import net.minecraft.client.gui.layouts.GridLayout.RowHelper;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.common.EventBusSubscriber;
 
-@EventBusSubscriber(modid = GInstrumentMod.MODID, value = Dist.CLIENT)
 public class GridInstrumentOptionsScreen extends InstrumentOptionsScreen {
 
     public GridInstrumentOptionsScreen(final GridInstrumentScreen screen) {

@@ -15,7 +15,7 @@ import java.util.Optional;
  * An abstract implementation of a sound played event.
  * @param <T> The sound object type
  */
-public abstract class InstrumentPlayedEvent<T> extends Event {
+public class InstrumentPlayedEvent<T> extends Event {
 
     private final T sound;
     private final NoteSoundMetadata soundMeta;

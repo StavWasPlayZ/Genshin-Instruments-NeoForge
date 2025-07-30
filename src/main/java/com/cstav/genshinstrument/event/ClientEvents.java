@@ -37,7 +37,7 @@ public class ClientEvents {
 
 
     @SubscribeEvent
-    public static void onClientTick(final ClientTickEvent event) {
+    public static void onClientTick(final ClientTickEvent.Pre event) {
         InstrumentScreen.getCurrentScreen(MINECRAFT).ifPresent(InstrumentScreen::handleAbruptClosing);
     }
 
