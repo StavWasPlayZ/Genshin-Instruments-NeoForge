@@ -1,6 +1,6 @@
 package com.cstav.genshinstrument.networking.packet.instrument.util;
 
-import com.cstav.genshinstrument.capability.instrumentOpen.InstrumentOpenProvider;
+import com.cstav.genshinstrument.attachment.instrumentopen.InstrumentOpenProvider;
 import com.cstav.genshinstrument.event.InstrumentOpenStateChangedEvent;
 import com.cstav.genshinstrument.networking.GIPacketHandler;
 import com.cstav.genshinstrument.networking.OpenInstrumentPacketSender;

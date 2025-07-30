@@ -1,7 +1,16 @@
 package com.cstav.genshinstrument.util;
 
+import com.cstav.genshinstrument.attachment.instrumentopen.InstrumentOpenProvider;
+import com.cstav.genshinstrument.networking.GIPacketHandler;
 import com.cstav.genshinstrument.networking.IModPacket;
+import com.cstav.genshinstrument.networking.packet.instrument.s2c.NotifyInstrumentOpenPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 import java.util.List;
 import java.util.Map;
@@ -9,60 +18,87 @@ import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 
 public class ServerUtil {
-
-//    public static void registerCodecs(
-//        List<Class<IModPacket>> c2sPacketTypes,
-//        List<Class<IModPacket>> s2cPacketTypes
-//    ) {
-//        ServerUtil.registerCodecs(PayloadTypeRegistry.playC2S(), c2sPacketTypes);
-//        ServerUtil.registerCodecs(PayloadTypeRegistry.playS2C(), s2cPacketTypes);
-//    }
-//
-//    public static void registerCodecs(PayloadTypeRegistry<RegistryFriendlyByteBuf> registry, List<Class<IModPacket>> packetTypes) {
-//        for (final Class<IModPacket> packetClass : packetTypes) {
-//            registry.register(
-//                IModPacket.type(packetClass),
-//                IModPacket.codec(packetClass)
-//            );
-//        }
-//    }
-//
-//
-//    public static void registerServerPackets(final List<Class<IModPacket>> packetTypes) {
-//        for (final Class<IModPacket> packetClass : packetTypes) {
-//            ServerPlayNetworking.registerGlobalReceiver(
-//                IModPacket.type(packetClass),
-//                IModPacket::handleServer
-//            );
-//        }
-//    }
-
-    @SuppressWarnings("unchecked")
-    public static void registerClientPackets(
-        final List<Class<IModPacket>> packetTypes,
-        Map<String, BiConsumer<? extends IModPacket, IPayloadContext>> packetSwitch,
-
-    ) {
+    public static void registerC2SPackets(List<Class<IModPacket>> packetTypes, PayloadRegistrar payloadRegistrar) {
         for (final Class<IModPacket> packetClass : packetTypes) {
-            ClientPlayNetworking.registerGlobalReceiver(
+            payloadRegistrar.playToServer(
                 IModPacket.type(packetClass),
-                (packet, context) -> {
-                    final BiConsumer<? extends IModPacket, IPayloadContext> packetHandler = packetSwitch.get(packet.type().id().getPath());
+                IModPacket.codec(packetClass),
 
-                    // Trust me bro, it HAS to be extending IModPacket.
-                    // It's an abstract class.
-                    ((BiConsumer<IModPacket, IPayloadContext>) packetHandler)
-                        .accept(packet, context);
-                }
+                (packet, context) ->
+                    context.enqueueWork(() -> packet.handleServer(context))
             );
         }
     }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void registerS2CPackets(
+        final List<Class<IModPacket>> packetTypes,
+        Map<String, BiConsumer<? extends IModPacket, IPayloadContext>> packetSwitch,
+        PayloadRegistrar payloadRegistrar
+    ) {
+        for (final Class<IModPacket> packetClass : packetTypes) {
+            payloadRegistrar.playToClient(
+                IModPacket.type(packetClass),
+                IModPacket.codec(packetClass),
+
+                (packet, context) -> executeClientPacketHandler(packet, context, packetSwitch)
+            );
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SuppressWarnings("unchecked")
+    private static void executeClientPacketHandler(
+        final IModPacket packet, final IPayloadContext context,
+        Map<String, BiConsumer<? extends IModPacket, IPayloadContext>> packetSwitch
+    ) {
+        final BiConsumer<? extends IModPacket, IPayloadContext> packetHandler =
+            packetSwitch.get(packet.type().id().getPath());
+
+        // It HAS to be extending IModPacket.
+        // It's an abstract class.
+        ((BiConsumer<IModPacket, IPayloadContext>) packetHandler)
+            .accept(packet, context);
+    }
+
 
     public static <T extends IModPacket> Entry<String, BiConsumer<T, IPayloadContext>> switchEntry(
         BiConsumer<T, IPayloadContext> handler,
         final Class<T> packetType
     ) {
         return Map.entry(IModPacket.path(packetType), handler);
+    }
+
+
+
+    public static void notifyOpenStateToPlayers(final ServerPlayer target) {
+        final Level level = target.level();
+
+        level.players().forEach((player) -> {
+            if (player.equals(target))
+                return;
+
+            if (InstrumentOpenProvider.isOpen(player))
+                notifyOpenStateToPlayer(player, target);
+        });
+    }
+
+    public static void notifyOpenStateToPlayer(final Player player, final ServerPlayer target) {
+        final NotifyInstrumentOpenPacket packet;
+
+        if (InstrumentOpenProvider.isItem(player)) {
+            packet = new NotifyInstrumentOpenPacket(
+                player.getUUID(),
+                InstrumentOpenProvider.getHand(player)
+            );
+        } else {
+            packet = new NotifyInstrumentOpenPacket(
+                player.getUUID(),
+                InstrumentOpenProvider.getBlockPos(player)
+            );
+        }
+
+        GIPacketHandler.sendToClient(packet, target);
     }
 
 }

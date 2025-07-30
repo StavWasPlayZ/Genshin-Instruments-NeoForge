@@ -1,8 +1,8 @@
 package com.cstav.genshinstrument.networking.packet.instrument.c2s;
 
 import com.cstav.genshinstrument.GInstrumentMod;
-import com.cstav.genshinstrument.capability.ModCapabilities;
 import com.cstav.genshinstrument.networking.IModPacket;
+import com.cstav.genshinstrument.util.ServerUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -30,13 +30,13 @@ public class ReqInstrumentOpenStatePacket extends IModPacket {
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
+    public void write(RegistryFriendlyByteBuf buf) {
         buf.writeUUID(uuid);
     }
 
     @Override
     public void handleServer(final IPayloadContext context) {
         final ServerPlayer player = (ServerPlayer) context.player();
-        ModCapabilities.notifyOpenStateToPlayer(player.level().getPlayerByUUID(uuid), player);
+        ServerUtil.notifyOpenStateToPlayer(player.level().getPlayerByUUID(uuid), player);
     }
 }

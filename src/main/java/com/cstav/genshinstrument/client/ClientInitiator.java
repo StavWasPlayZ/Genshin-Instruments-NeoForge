@@ -12,10 +12,8 @@ import com.cstav.genshinstrument.client.gui.screen.instrument.ukelele.UkuleleScr
 import com.cstav.genshinstrument.client.gui.screen.instrument.vintagelyre.VintageLyreScreen;
 import com.cstav.genshinstrument.client.gui.screen.instrument.windsonglyre.WindsongLyreScreen;
 import com.cstav.genshinstrument.client.gui.screen.options.instrument.GridInstrumentOptionsScreen;
-import com.cstav.genshinstrument.demos.GenshinInstruments;
 import com.cstav.genshinstrument.item.clientExtensions.ModItemPredicates;
 import com.cstav.genshinstrument.networking.GIPacketHandler;
-import com.cstav.genshinstrument.networking.IModPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -27,12 +25,11 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.model.SeparateTransformsModel;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
-@Mod(value = GenshinInstruments.MODID, dist = Dist.CLIENT)
+@Mod(value = GInstrumentMod.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(value = Dist.CLIENT, modid = GInstrumentMod.MODID)
 public class ClientInitiator {
 
@@ -64,19 +61,7 @@ public class ClientInitiator {
 
     @SubscribeEvent
     public static void onPayloadRegistration(final RegisterPayloadHandlersEvent event) {
-        //TODO: Move to ServerUtil
-
-        PayloadRegistrar registrar = event.registrar(GInstrumentMod.MODID)
-            .versioned(GIPacketHandler.PROTOCOL_VERSION);
-
-        for (final Class<IModPacket> c2sPacketClass : GIPacketHandler.ACCEPTABLE_PACKETS_C2S) {
-            registrar = registrar.playToServer(
-                IModPacket.type(c2sPacketClass),
-                IModPacket.codec(c2sPacketClass),
-                (iModPacket, context) ->
-                    context.enqueueWork(() -> iModPacket.handleServer(context))
-            );
-        }
+        GIPacketHandler.registerClientPackets();
     }
 
     @SubscribeEvent

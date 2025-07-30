@@ -1,8 +1,8 @@
 package com.cstav.genshinstrument.event;
 
 import com.cstav.genshinstrument.GInstrumentMod;
+import com.cstav.genshinstrument.attachment.instrumentopen.InstrumentOpenProvider;
 import com.cstav.genshinstrument.block.partial.AbstractInstrumentBlock;
-import com.cstav.genshinstrument.capability.instrumentOpen.InstrumentOpenProvider;
 import com.cstav.genshinstrument.client.config.ModClientConfigs;
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.IHeldInstrumentScreen;
 import com.cstav.genshinstrument.client.gui.screen.instrument.partial.InstrumentScreen;

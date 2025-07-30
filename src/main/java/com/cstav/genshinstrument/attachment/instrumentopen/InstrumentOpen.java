@@ -1,28 +1,32 @@
-package com.cstav.genshinstrument.capability.instrumentOpen;
+package com.cstav.genshinstrument.attachment.instrumentopen;
 
+import com.cstav.genshinstrument.attachment.ModAttachments;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 
-@AutoRegisterCapability
-public class InstrumentOpen {
+public class InstrumentOpen implements INBTSerializable<CompoundTag> {
     public static final String
         OPEN_TAG = "InstrumentOpen",
         IS_ITEM_TAG = "IsItem",
         BLOCK_POS_TAG = "BlockPos",
         HAND_TAG = "InOffhand"
-    ;
+            ;
 
     private boolean isOpen = false, isItem = false;
     private BlockPos blockPos;
     private InteractionHand hand;
 
     public static boolean isOpen(final Player player) {
-        final LazyOptional<InstrumentOpen> oIsOpen = player.getCapability(InstrumentOpenProvider.INSTRUMENT_OPEN);
-        return oIsOpen.isPresent() && oIsOpen.resolve().get().isOpen;
+        final InstrumentOpen oIsOpen = player.getData(ModAttachments.INSTRUMENT_OPEN);
+        return oIsOpen.isOpen;
     }
 
 
@@ -47,7 +51,7 @@ public class InstrumentOpen {
     public InteractionHand getHand() {
         return hand;
     }
-    
+
     public void setOpen(final InteractionHand hand) {
         isOpen = true;
 
@@ -69,7 +73,10 @@ public class InstrumentOpen {
     }
 
 
-    public void saveNBTData(final CompoundTag nbt) {
+    @Override
+    public @UnknownNullability CompoundTag serializeNBT(@NotNull Provider provider) {
+        final CompoundTag nbt = new CompoundTag();
+
         nbt.putBoolean(OPEN_TAG, isOpen);
         nbt.putBoolean(IS_ITEM_TAG, isItem);
 
@@ -77,12 +84,17 @@ public class InstrumentOpen {
             nbt.put(BLOCK_POS_TAG, NbtUtils.writeBlockPos(blockPos));
         if (hand != null)
             nbt.putBoolean(HAND_TAG, hand == InteractionHand.OFF_HAND);
+
+        return nbt;
     }
-    public void loadNBTData(final CompoundTag nbt) {
+
+    @Override
+    public void deserializeNBT(@NotNull Provider provider, CompoundTag nbt) {
         isOpen = nbt.getBoolean(OPEN_TAG);
         isItem = nbt.getBoolean(IS_ITEM_TAG);
 
         blockPos = NbtUtils.readBlockPos(nbt, BLOCK_POS_TAG).orElse(null);
+
         if (nbt.contains(HAND_TAG, Tag.TAG_BYTE))
             hand = nbt.getBoolean(HAND_TAG) ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
     }

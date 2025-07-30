@@ -1,9 +1,10 @@
 package com.cstav.genshinstrument.event;
 
 import com.cstav.genshinstrument.GInstrumentMod;
-import com.cstav.genshinstrument.capability.instrumentOpen.InstrumentOpenProvider;
+import com.cstav.genshinstrument.attachment.instrumentopen.InstrumentOpenProvider;
 import com.cstav.genshinstrument.item.InstrumentItem;
 import com.cstav.genshinstrument.networking.packet.instrument.util.InstrumentPacketUtil;
+import com.cstav.genshinstrument.util.ServerUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -11,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 @EventBusSubscriber(modid = GInstrumentMod.MODID)
@@ -30,6 +32,19 @@ public abstract class ServerEvents {
     @SubscribeEvent
     public static void onPlayerLeave(final PlayerEvent.PlayerLoggedOutEvent event) {
         InstrumentPacketUtil.setInstrumentClosed((ServerPlayer) event.getEntity());
+    }
+
+
+    // Sync the open state of players to a new player
+    @SubscribeEvent
+    public static void onPlayerJoin(final PlayerEvent.PlayerLoggedInEvent event) {
+        ServerUtil.notifyOpenStateToPlayers((ServerPlayer) event.getEntity());
+    }
+
+    // And on dimension traversal
+    @SubscribeEvent
+    public static void onDimensionChangedEvent(final PlayerChangedDimensionEvent event) {
+        ServerUtil.notifyOpenStateToPlayers((ServerPlayer) event.getEntity());
     }
 
 

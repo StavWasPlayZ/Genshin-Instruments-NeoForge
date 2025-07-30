@@ -56,7 +56,7 @@ public class C2SHeldNoteSoundPacket extends C2SNotePacket<HeldNoteSound> {
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
+    public void write(RegistryFriendlyByteBuf buf) {
         super.write(buf);
         buf.writeEnum(phase);
     }

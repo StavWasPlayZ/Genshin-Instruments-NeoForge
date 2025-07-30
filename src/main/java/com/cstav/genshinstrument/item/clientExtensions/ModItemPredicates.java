@@ -1,8 +1,8 @@
 package com.cstav.genshinstrument.item.clientExtensions;
 
 import com.cstav.genshinstrument.GInstrumentMod;
-import com.cstav.genshinstrument.capability.instrumentOpen.InstrumentOpen;
-import com.cstav.genshinstrument.capability.instrumentOpen.InstrumentOpenProvider;
+import com.cstav.genshinstrument.attachment.instrumentopen.InstrumentOpen;
+import com.cstav.genshinstrument.attachment.instrumentopen.InstrumentOpenProvider;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +14,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class ModItemPredicates {
 
+    @SuppressWarnings("deprecation")
     public static void register() {
         ItemProperties.registerGeneric(GInstrumentMod.loc("instrument_open"),
             ModItemPredicates::instrumentOpenPredicate

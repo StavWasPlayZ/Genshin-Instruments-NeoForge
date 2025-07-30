@@ -4,6 +4,7 @@ import com.cstav.genshinstrument.client.gui.screen.instrument.partial.note.NoteB
 import com.cstav.genshinstrument.networking.IModPacket;
 import com.cstav.genshinstrument.networking.packet.instrument.NoteSoundMetadata;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -42,7 +43,7 @@ public abstract class C2SNotePacket<T> extends IModPacket {
         meta = NoteSoundMetadata.read(buf);
     }
     @Override
-    public void write(final FriendlyByteBuf buf) {
+    public void write(final RegistryFriendlyByteBuf buf) {
         writeSound(buf);
         meta.write(buf);
     }

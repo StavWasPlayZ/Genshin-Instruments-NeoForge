@@ -1,6 +1,6 @@
 package com.cstav.genshinstrument.item.clientExtensions;
 
-import com.cstav.genshinstrument.capability.instrumentOpen.InstrumentOpenProvider;
+import com.cstav.genshinstrument.attachment.instrumentopen.InstrumentOpenProvider;
 import com.cstav.genshinstrument.client.ModArmPose;
 import net.minecraft.client.model.HumanoidModel.ArmPose;
 import net.minecraft.world.InteractionHand;

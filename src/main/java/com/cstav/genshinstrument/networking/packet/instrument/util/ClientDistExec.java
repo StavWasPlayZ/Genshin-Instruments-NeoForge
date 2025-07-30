@@ -1,6 +1,6 @@
 package com.cstav.genshinstrument.networking.packet.instrument.util;
 
-import com.cstav.genshinstrument.capability.instrumentOpen.InstrumentOpenProvider;
+import com.cstav.genshinstrument.attachment.instrumentopen.InstrumentOpenProvider;
 import com.cstav.genshinstrument.client.gui.screen.instrument.InstrumentScreenRegistry;
 import com.cstav.genshinstrument.event.InstrumentOpenStateChangedEvent;
 import com.cstav.genshinstrument.networking.IModPacket;
@@ -45,6 +45,9 @@ public class ClientDistExec {
 
     public static void handle(final NotifyInstrumentOpenPacket packet, final IPayloadContext context) {
         final Player player = Minecraft.getInstance().level.getPlayerByUUID(packet.playerUUID);
+
+        if (player == null)
+            return;
 
         if (packet.isOpen) {
 

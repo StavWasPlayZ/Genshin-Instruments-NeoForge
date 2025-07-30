@@ -1,7 +1,7 @@
 package com.cstav.genshinstrument.event;
 
+import com.cstav.genshinstrument.attachment.instrumentopen.InstrumentOpenProvider;
 import com.cstav.genshinstrument.block.partial.InstrumentBlockEntity;
-import com.cstav.genshinstrument.capability.instrumentOpen.InstrumentOpenProvider;
 import com.cstav.genshinstrument.networking.packet.instrument.NoteSoundMetadata;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
