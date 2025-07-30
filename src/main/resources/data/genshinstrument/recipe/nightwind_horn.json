@@ -7,11 +7,14 @@
         },
         "X": {
             "item": "minecraft:gold_ingot"
+        },
+        "Q": {
+            "item": "minecraft:quartz"
         }
     },
 
     "pattern": [
-        " X ",
+        " XQ",
         "X#X",
         "XX "
     ],
