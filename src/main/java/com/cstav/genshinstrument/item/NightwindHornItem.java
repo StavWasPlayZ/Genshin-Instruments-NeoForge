@@ -30,7 +30,7 @@ public class NightwindHornItem extends WindInstrumentItem {
             return (
                 (entityLiving instanceof Player player)
                 ? (InstrumentOpenProvider.isOpen(player) && InstrumentOpenProvider.isItem(player))
-                    ? ModArmPose.PLAYING_NIGHTWIND_HORN_INSTRUMENT
+                    ? ModArmPose.PLAYING_NIGHTWIND_HORN_INSTRUMENT_EP.getValue()
                     : null
                 : null
             );

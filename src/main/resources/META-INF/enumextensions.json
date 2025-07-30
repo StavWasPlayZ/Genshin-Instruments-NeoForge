@@ -1,0 +1,44 @@
+{
+    "entries": [
+        {
+            "enum": "net/minecraft/client/model/HumanoidModel.ArmPose",
+            "name": "PLAYING_ITEM_INSTRUMENT",
+
+            "constructor": "(ZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+            "parameters": {
+                "class": "com/cstav/genshinstrument/client/ModArmPose",
+                "field": "PLAYING_ITEM_INSTRUMENT_EP"
+            }
+        },
+        {
+            "enum": "net/minecraft/client/model/HumanoidModel.ArmPose",
+            "name": "PLAYING_BLOCK_INSTRUMENT",
+
+            "constructor": "(ZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+            "parameters": {
+                "class": "com/cstav/genshinstrument/client/ModArmPose",
+                "field": "PLAYING_BLOCK_INSTRUMENT_EP"
+            }
+        },
+        {
+            "enum": "net/minecraft/client/model/HumanoidModel.ArmPose",
+            "name": "PLAYING_WIND_INSTRUMENT",
+
+            "constructor": "(ZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+            "parameters": {
+                "class": "com/cstav/genshinstrument/client/ModArmPose",
+                "field": "PLAYING_WIND_INSTRUMENT_EP"
+            }
+        },
+        {
+            "enum": "net/minecraft/client/model/HumanoidModel.ArmPose",
+            "name": "PLAYING_NIGHTWIND_HORN_INSTRUMENT",
+
+            "constructor": "(ZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+            "parameters": {
+                "class": "com/cstav/genshinstrument/client/ModArmPose",
+                "field": "PLAYING_NIGHTWIND_HORN_INSTRUMENT_EP"
+            }
+        }
+    ]
+}

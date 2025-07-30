@@ -23,6 +23,6 @@ public class InstrumentItemClientExt implements IClientItemExtensions {
         if (!InstrumentOpenProvider.isOpen(player) || !InstrumentOpenProvider.isItem(player))
             return null;
 
-        return ModArmPose.PLAYING_ITEM_INSTRUMENT;
+        return ModArmPose.PLAYING_ITEM_INSTRUMENT_EP.getValue();
     }
 }

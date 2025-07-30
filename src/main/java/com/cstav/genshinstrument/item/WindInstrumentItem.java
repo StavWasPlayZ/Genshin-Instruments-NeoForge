@@ -31,7 +31,7 @@ public class WindInstrumentItem extends InstrumentItem {
             return (
                 (entityLiving instanceof Player player)
                 ? (InstrumentOpenProvider.isOpen(player) && InstrumentOpenProvider.isItem(player))
-                    ? ModArmPose.PLAYING_WIND_INSTRUMENT
+                    ? ModArmPose.PLAYING_WIND_INSTRUMENT_EP.getValue()
                     : null
                 : null
             );

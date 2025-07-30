@@ -49,7 +49,7 @@ public abstract class AbstractInstrumentBlock extends BaseEntityBlock {
      */
     private Object clientBlockArmPose;
     protected void initClientBlockUseAnim(final Consumer<ArmPose> consumer) {
-        consumer.accept(ModArmPose.PLAYING_BLOCK_INSTRUMENT);
+        consumer.accept(ModArmPose.PLAYING_BLOCK_INSTRUMENT_EP.getValue());
     }
 
     @OnlyIn(Dist.CLIENT)

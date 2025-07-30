@@ -5,6 +5,8 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.HumanoidArm;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.common.asm.enumextension.EnumProxy;
+import net.neoforged.neoforge.client.IArmPoseTransformer;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class ModArmPose {
@@ -13,8 +15,10 @@ public abstract class ModArmPose {
     public static void load() {}
 
 
-    public static final ArmPose PLAYING_ITEM_INSTRUMENT = ArmPose.create("playing_item_instrument", true,
-        (model, entity, arm) -> {
+    public static final EnumProxy<ArmPose> PLAYING_ITEM_INSTRUMENT_EP = new EnumProxy<>(
+        ArmPose.class,
+        true,
+        (IArmPoseTransformer) (model, entity, arm) -> {
             model.rightArm.xRot = -HAND_HEIGHT_ROT;
             model.rightArm.zRot = -0.35f;
 
@@ -23,8 +27,10 @@ public abstract class ModArmPose {
         }
     );
 
-    public static final ArmPose PLAYING_BLOCK_INSTRUMENT = ArmPose.create("playing_block_instrument", true,
-        (model, entity, arm) -> {
+    public static final EnumProxy<ArmPose> PLAYING_BLOCK_INSTRUMENT_EP = new EnumProxy<>(
+        ArmPose.class,
+        true,
+        (IArmPoseTransformer) (model, entity, arm) -> {
             model.rightArm.xRot = -HAND_HEIGHT_ROT;
 
             model.leftArm.xRot = -HAND_HEIGHT_ROT;
@@ -44,14 +50,18 @@ public abstract class ModArmPose {
         arm.yRot = 0.5f;
     }
 
-    public static final ArmPose PLAYING_WIND_INSTRUMENT = ArmPose.create("playing_wind_instrument", true,
-        (model, entity, arm) -> {
+    public static final EnumProxy<ArmPose> PLAYING_WIND_INSTRUMENT_EP = new EnumProxy<>(
+        ArmPose.class,
+        true,
+        (IArmPoseTransformer) (model, entity, arm) -> {
             defRightWind(model.rightArm);
             defLeftWind(model.leftArm);
         }
     );
-    public static final ArmPose PLAYING_NIGHTWIND_HORN_INSTRUMENT = ArmPose.create("playing_nightwind_horn_instrument", true,
-        (model, entity, arm) -> {
+    public static final EnumProxy<ArmPose> PLAYING_NIGHTWIND_HORN_INSTRUMENT_EP = new EnumProxy<>(
+        ArmPose.class,
+        true,
+        (IArmPoseTransformer) (model, entity, arm) -> {
             if (arm == HumanoidArm.RIGHT) {
                 defRightWind(model.rightArm);
 
